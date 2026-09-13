@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoSJE Automated CCTV & GIS Spatial Portal</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  
+  <style>
+    :root {
+      --bg-dark: #0a0e17;
+      --bg-card: rgba(18, 24, 36, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --cyan-accent: #00d2ff;
+      --purple-accent: #7f00ff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #f8fafc;
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Outfit', system-ui, sans-serif; }
+
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .badge-normal { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-warning { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-critical { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); animation: pulse 2s infinite; }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+      50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(0, 210, 255, 0.25);
+    }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .btn-secondary:hover { background: #334155; }
+
+    /* Map Customization */
+    #map { height: 420px; width: 100%; border-radius: 12px; }
+    .leaflet-container { background: #0b1120 !important; }
+    .leaflet-popup-content-wrapper { background: #1e293b !important; color: #f8fafc !important; border-radius: 10px !important; }
+    .leaflet-popup-tip { background: #1e293b !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header style="border-bottom: 1px solid var(--border-color); background: rgba(10, 14, 23, 0.9); padding: 14px 24px;">
+    <div style="max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #00d2ff, #7f00ff); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px;">
+          M
+        </div>
+        <div>
+          <h1 style="font-size: 17px; font-weight: 800; letter-spacing: -0.01em;">MoSJE Surveillance Engine & GIS Portal</h1>
+          <p style="font-size: 11px; color: #94a3b8;">Automated CCTV Headcount &amp; GeoDjango PostGIS Site Boundaries</p>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button onclick="triggerAiSample()" class="btn btn-primary">
+          ⚡ Trigger AI Sampling Frame
+        </button>
+        <a href="http://localhost:3000" target="_blank" class="btn btn-secondary">
+          🖥️ Open React Dashboard
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Grid -->
+  <main style="max-width: 1280px; margin: 24px auto; padding: 0 16px; display: grid; grid-template-columns: 1fr; gap: 24px;">
+
+    <!-- Top Banner Alert -->
+    <div id="aiAlertBanner" class="glass-card" style="display: none; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3);">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px; color: #f87171; font-weight: 700; font-size: 14px;">
+          <span>🚨 UNANNOUNCED AUDIT DISPATCH ACTIVE:</span>
+          <span id="aiAlertText" style="color: #f8fafc; font-weight: 400;"></span>
+        </div>
+        <span class="badge badge-critical">AI RISK &gt; 65%</span>
+      </div>
+    </div>
+
+    <!-- GIS Map Panel -->
+    <div class="glass-card">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <h2 style="font-size: 16px; font-weight: 700;">🗺️ PostGIS Hardware-Verified Site Boundaries</h2>
+        <span style="font-size: 12px; color: #94a3b8;">Interactive GeoJSON spatial boundaries</span>
+      </div>
+      <div id="map"></div>
+    </div>
+
+    <!-- Institute Centers Cards Grid -->
+    <div>
+      <h2 style="font-size: 16px; font-weight: 700; margin-bottom: 14px;">🏛️ Monitored Welfare & Training Centers</h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+        {% for center in centers %}
+        <div class="glass-card" style="display: flex; flex-col; justify-content: space-between;">
+          <div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <span style="font-family: monospace; font-size: 11px; color: var(--cyan-accent); font-weight: 700;">{{ center.code }}</span>
+              <span class="badge {% if center.risk_score >= 65 %}badge-critical{% elif center.risk_score >= 35 %}badge-warning{% else %}badge-normal{% endif %}">
+                {{ center.risk_level }}
+              </span>
+            </div>
+
+            <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 4px;">{{ center.name }}</h3>
+            <p style="font-size: 12px; color: #94a3b8; margin-bottom: 12px;">{{ center.district }}, {{ center.state }}</p>
+            
+            <div style="background: rgba(10, 14, 23, 0.6); padding: 10px; border-radius: 8px; font-size: 12px; display: grid; gap: 4px;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: #94a3b8;">Current / Expected:</span>
+                <span style="font-weight: 700; color: #fbbf24;">{{ center.current_headcount }} / {{ center.expected_capacity }}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: #94a3b8;">Risk Score:</span>
+                <span style="font-weight: 700; color: {% if center.risk_score >= 65 %}#f87171{% else %}#34d399{% endif %};">{{ center.risk_score }}%</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 14px; display: flex; gap: 8px;">
+            <a href="/api/centers/{{ center.id }}/" class="btn btn-secondary" style="flex: 1; text-align: center; justify-content: center; font-size: 11px;">
+              REST API JSON
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script>
+    const map = L.map('map').setView([22.5, 78.9], 5);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png?key=cb1_3jax_1_3c756737513244642051f009', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 20
+    }).addTo(map);
+
+    const centersData = {{ centers_json|safe }};
+
+    centersData.forEach(c => {
+      let color = '#10b981';
+      if (c.risk_score >= 65) color = '#ef4444';
+      else if (c.risk_score >= 35) color = '#f59e0b';
+
+      if (c.boundary_geojson && c.boundary_geojson.length > 0) {
+        const polygonCoords = c.boundary_geojson.map(pt => [pt[1], pt[0]]);
+        L.polygon(polygonCoords, {
+          color: color,
+          fillColor: color,
+          fillOpacity: 0.25,
+          weight: 2
+        }).addTo(map);
+      }
+
+      const icon = L.divIcon({
+        html: `<div style="background:${color}; width:28px; height:28px; border-radius:50%; border:2px solid #0f172a; display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:10px;">${Math.round(c.risk_score)}%</div>`,
+        className: '',
+        iconSize: [28, 28]
+      });
+
+      L.marker([c.latitude, c.longitude], { icon: icon })
+        .bindPopup(`
+          <div style="font-size:12px;">
+            <b style="color:#00d2ff;">${c.name}</b><br/>
+            <span>Turnout: <b>${c.current_headcount} / ${c.expected_capacity}</b></span><br/>
+            <span>Risk Score: <b style="color:${color};">${c.risk_score}%</b></span>
+          </div>
+        `)
+        .addTo(map);
+    });
+
+    async function triggerAiSample() {
+      try {
+        const res = await fetch('/api/ai/trigger/', { method: 'POST' });
+        const data = await res.json();
+        if (data.status === 'SUCCESS') {
+          window.location.reload();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
