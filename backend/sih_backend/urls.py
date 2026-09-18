@@ -9,6 +9,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from centers.models import InstituteCenter
+from ai_engine.stream_processor import ai_engine_instance
 
 @api_view(['GET'])
 def api_root(request):
@@ -16,6 +17,12 @@ def api_root(request):
         centers = InstituteCenter.objects.all()
         centers_list = []
         for c in centers:
+            latest_log = c.headcount_logs.order_by('-timestamp').first()
+            if not latest_log:
+                latest_log = ai_engine_instance.process_center_keyframe(c.id)
+            
+            snapshot_url = latest_log.frame_snapshot if (latest_log and latest_log.frame_snapshot) else ""
+
             centers_list.append({
                 'id': c.id,
                 'name': c.name,
@@ -28,7 +35,8 @@ def api_root(request):
                 'current_headcount': c.current_headcount,
                 'risk_score': c.risk_score,
                 'risk_level': c.risk_level,
-                'boundary_geojson': c.boundary_geojson
+                'boundary_geojson': c.boundary_geojson,
+                'snapshot_url': snapshot_url
             })
         return render(request, 'api_dashboard.html', {
             'centers': centers,
@@ -39,6 +47,7 @@ def api_root(request):
         "status": "online",
         "service": "MoSJE CCTV Automated Headcount & Geo-Locked Inspection API",
         "version": "1.0.0",
+        "dataset": "Kaggle CCTV Exam Monitor Dataset (8,156 Frames)",
         "endpoints": {
             "centers": "/api/centers/",
             "geojson": "/api/centers/geojson_features/",
@@ -51,16 +60,15 @@ def api_root(request):
 
 @api_view(['POST', 'GET'])
 def trigger_ai_sample(request):
-    from ai_engine.stream_processor import ai_engine_instance
-    from centers.models import InstituteCenter
-    
     centers = InstituteCenter.objects.all()
     logs = []
     for c in centers:
         log = ai_engine_instance.process_center_keyframe(c.id)
         if log:
             logs.append({
-                'center': c.code,
+                'center_id': c.id,
+                'center_code': c.code,
+                'center_name': c.name,
                 'detected': log.detected_headcount,
                 'expected': log.expected_headcount,
                 'risk_score': log.risk_score_snapshot,

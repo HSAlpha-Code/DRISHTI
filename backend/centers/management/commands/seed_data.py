@@ -10,7 +10,7 @@ class Command(BaseCommand):
         self.stdout.write("Seeding MoSJE Institute Centers and GIS boundaries...")
         
         # Center 1: PM-DAKSH Delhi
-        c1, _ = InstituteCenter.objects.get_or_create(
+        c1, _ = InstituteCenter.objects.update_or_create(
             code='MOSJE-DEL-001',
             defaults={
                 'name': 'PM-DAKSH Skill Training Institute',
@@ -18,8 +18,8 @@ class Command(BaseCommand):
                 'state': 'Delhi',
                 'latitude': 28.6139,
                 'longitude': 77.2090,
-                'expected_capacity': 60,
-                'current_headcount': 54,
+                'expected_capacity': 50,
+                'current_headcount': 28,
                 'risk_score': 12.0,
                 'risk_level': 'NORMAL',
                 'cctv_stream_url': 'cctv_stream_del_01.mp4',
@@ -34,7 +34,7 @@ class Command(BaseCommand):
         )
 
         # Center 2: NISD Dwarka Delhi (Flagged Center with High Risk Score & Active Dispatch)
-        c2, _ = InstituteCenter.objects.get_or_create(
+        c2, _ = InstituteCenter.objects.update_or_create(
             code='MOSJE-DEL-002',
             defaults={
                 'name': 'National Institute of Social Defence',
@@ -42,7 +42,7 @@ class Command(BaseCommand):
                 'state': 'Delhi',
                 'latitude': 28.5921,
                 'longitude': 77.0460,
-                'expected_capacity': 45,
+                'expected_capacity': 32,
                 'current_headcount': 12, # Major Headcount Discrepancy!
                 'risk_score': 78.5,
                 'risk_level': 'CRITICAL',
@@ -58,7 +58,7 @@ class Command(BaseCommand):
         )
 
         # Center 3: Welfare Center Mumbai
-        c3, _ = InstituteCenter.objects.get_or_create(
+        c3, _ = InstituteCenter.objects.update_or_create(
             code='MOSJE-MUM-003',
             defaults={
                 'name': 'Senior Citizen Welfare & Support Center',
@@ -66,8 +66,8 @@ class Command(BaseCommand):
                 'state': 'Maharashtra',
                 'latitude': 19.0596,
                 'longitude': 72.8406,
-                'expected_capacity': 50,
-                'current_headcount': 38,
+                'expected_capacity': 30,
+                'current_headcount': 29,
                 'risk_score': 42.0,
                 'risk_level': 'ELEVATED',
                 'cctv_stream_url': 'cctv_stream_mum_03.mp4',
@@ -82,7 +82,7 @@ class Command(BaseCommand):
         )
 
         # Center 4: Divyangjan Center Bengaluru
-        c4, _ = InstituteCenter.objects.get_or_create(
+        c4, _ = InstituteCenter.objects.update_or_create(
             code='MOSJE-BLR-004',
             defaults={
                 'name': 'Divyangjan Rehabilitation & Empowerment Center',
@@ -90,8 +90,8 @@ class Command(BaseCommand):
                 'state': 'Karnataka',
                 'latitude': 12.9784,
                 'longitude': 77.6408,
-                'expected_capacity': 40,
-                'current_headcount': 39,
+                'expected_capacity': 34,
+                'current_headcount': 33,
                 'risk_score': 8.5,
                 'risk_level': 'NORMAL',
                 'cctv_stream_url': 'cctv_stream_blr_04.mp4',

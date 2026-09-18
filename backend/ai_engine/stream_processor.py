@@ -2,6 +2,7 @@ import os
 import time
 import math
 import random
+import glob
 import cv2
 import numpy as np
 import threading
@@ -12,61 +13,113 @@ from channels.layers import get_channel_layer
 
 class AIHeadcountEngine:
     def __init__(self):
-        self.hog = None
-        try:
-            if hasattr(cv2, 'HOGDescriptor'):
-                self.hog = cv2.HOGDescriptor()
-                if hasattr(cv2, 'HOGDescriptor_getDefaultPeopleDetector'):
-                    self.hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
-            elif hasattr(cv2, 'objdetect') and hasattr(cv2.objdetect, 'HOGDescriptor'):
-                self.hog = cv2.objdetect.HOGDescriptor()
-        except Exception as e:
-            print(f"[OpenCV Init Warning] {e}")
-
         self.channel_layer = get_channel_layer()
         self.is_running = False
         self.thread = None
+        self.yolo_model = None
+        self.video_cap = None
 
-    def generate_synthetic_cctv_frame(self, center_code: str, expected_count: int, simulated_count: int):
+    def get_yolo_model(self):
         """
-        Generates a realistic 854x480 CCTV keyframe snapshot with timestamp overlay,
-        CCTV camera watermark, detected person bounding boxes, and headcount HUD.
+        Lazy-loads the Ultralytics YOLOv11 model.
         """
-        h, w = 480, 854
-        frame = np.zeros((h, w, 3), dtype=np.uint8)
+        if self.yolo_model is None:
+            try:
+                from ultralytics import YOLO
+                model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'yolo11n.pt')
+                if not os.path.exists(model_path):
+                    model_path = 'yolo11n.pt'
+                self.yolo_model = YOLO(model_path)
+                print(f"[AI Engine] Active YOLOv11 model initialized successfully.")
+            except Exception as e:
+                print(f"[AI Engine Warning] Failed to load YOLOv11 model: {e}")
+                self.yolo_model = False
+        return self.yolo_model if self.yolo_model is not False else None
+
+    def process_video_frame_yolo(self, center_code: str, expected_count: int):
+        """
+        Actively runs YOLOv11 model inference on a video frame from simulated_classroom_cctv.mp4.
+        Returns (frame, detected_person_count).
+        """
+        if self.video_cap is None or not self.video_cap.isOpened():
+            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+            video_path = os.path.join(base_dir, 'resources', 'simulated_classroom_cctv.mp4')
+            self.video_cap = cv2.VideoCapture(video_path)
+            if not self.video_cap.isOpened():
+                print(f"[AI Engine Error] Could not open video source {video_path}")
+                # Fallback black canvas
+                frame = np.zeros((480, 854, 3), dtype=np.uint8)
+                cv2.rectangle(frame, (0, 0), (854, 480), (20, 25, 30), -1)
+                return frame, 0
+
+        ret, frame = self.video_cap.read()
+        if not ret:
+            # Restart video
+            self.video_cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+            ret, frame = self.video_cap.read()
+            if not ret:
+                frame = np.zeros((480, 854, 3), dtype=np.uint8)
+                return frame, 0
+
+        # Resize for consistent web display
+        frame = cv2.resize(frame, (854, 480))
+        annotated_frame = frame.copy()
+        detected_count = 0
+
+        yolo = self.get_yolo_model()
+        if yolo is not None:
+            try:
+                # Use parameters from test.py
+                results = yolo.predict(
+                    source=frame,
+                    conf=0.15,
+                    imgsz=960,
+                    classes=[0],  # Filter to target class
+                    verbose=False
+                )
+                
+                for r in results:
+                    detected_count = len(r.boxes)
+                    annotated_frame = r.plot()
+            except Exception as ex:
+                print(f"[YOLOv11 Inference Error] {ex}")
+
+        # Render headcount badge (from test.py)
+        cv2.rectangle(annotated_frame, (20, 20), (350, 80), (0, 0, 0), -1)
+        cv2.putText(
+            annotated_frame, 
+            f"Classroom Count: {detected_count}", 
+            (30, 60), 
+            cv2.FONT_HERSHEY_SIMPLEX, 
+            1.0, 
+            (0, 255, 0), 
+            2, 
+            cv2.LINE_AA
+        )
         
-        # Draw floor & wall perspective grid lines
-        cv2.rectangle(frame, (0, 0), (w, h), (20, 25, 30), -1)
-        cv2.line(frame, (0, 360), (w, 360), (40, 50, 60), 2)
-        for i in range(0, w, 80):
-            cv2.line(frame, (i, 360), (int(i * 0.8 + 80), h), (30, 40, 45), 1)
-
-        # Draw detected individuals
-        random.seed(int(time.time() // 5) + hash(center_code))
-        for k in range(simulated_count):
-            grid_x = 80 + (k % 6) * 120 + random.randint(-15, 15)
-            grid_y = 180 + (k // 6) * 80 + random.randint(-10, 10)
-            
-            box_w, box_h = 50, 110
-            x1, y1 = max(10, grid_x), max(50, grid_y)
-            x2, y2 = min(w - 10, x1 + box_w), min(h - 50, y1 + box_h)
-
-            color = (0, 220, 120) if abs(expected_count - simulated_count) < 5 else (0, 140, 255)
-            cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-            cv2.rectangle(frame, (x1, y1 - 22), (x1 + 80, y1), color, -1)
-            cv2.putText(frame, f"Person {k+1}", (x1 + 4, y1 - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255, 255, 255), 1)
-
-        # Draw CCTV HUD Overlay Header
-        cv2.rectangle(frame, (0, 0), (w, 40), (10, 15, 20), -1)
+        # Add a banner for center code
+        cv2.rectangle(annotated_frame, (20, 90), (350, 130), (0, 0, 0), -1)
+        cv2.putText(
+            annotated_frame,
+            f"Center: {center_code} | Expected: {expected_count}",
+            (30, 115),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.6,
+            (0, 255, 255),
+            2,
+            cv2.LINE_AA
+        )
+        
+        # Draw CCTV HUD Header Overlay to keep it looking somewhat like a CCTV feed
+        w, h = 854, 480
         now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        cv2.putText(frame, f"REC LIVE | CAM-01 [{center_code}] | {now_str}", (15, 26), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 255, 200), 2)
+        cv2.putText(annotated_frame, f"REC LIVE | CAM-01 [{center_code}] | {now_str}", (15, h - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.48, (0, 255, 200), 1)
 
-        # Draw Headcount Analytics Banner Footer
-        cv2.rectangle(frame, (0, h - 45), (w, h), (15, 20, 25), -1)
-        status_text = f"YOLO11 AI COUNT: {simulated_count} / EXPECTED: {expected_count}"
-        cv2.putText(frame, status_text, (20, h - 16), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+        # Blinking REC status dot
+        dot_color = (0, 0, 255) if (int(time.time()) % 2 == 0) else (0, 200, 0)
+        cv2.circle(annotated_frame, (w - 25, h - 24), 6, dot_color, -1)
 
-        return frame
+        return annotated_frame, detected_count
 
     def process_center_keyframe(self, center_id: int):
         from centers.models import InstituteCenter
@@ -78,20 +131,11 @@ class AIHeadcountEngine:
         except InstituteCenter.DoesNotExist:
             return None
 
-        cycle = (int(time.time()) // 10) % 6
-        if center.code == 'MOSJE-DEL-002':
-            simulated_detected = 12 if cycle in [1, 2, 3] else 18
-        elif center.code == 'MOSJE-MUM-003':
-            simulated_detected = 48
-        else:
-            simulated_detected = max(5, center.expected_capacity - random.randint(0, 8))
+        # Process a frame from the simulated video
+        frame, detected_headcount = self.process_video_frame_yolo(center.code, center.expected_capacity)
 
-        old_score = center.risk_score
-        old_level = center.risk_level
-        new_score, new_level = center.recalculate_risk_score(simulated_detected)
+        new_score, new_level = center.recalculate_risk_score(detected_headcount)
 
-        frame = self.generate_synthetic_cctv_frame(center.code, center.expected_capacity, simulated_detected)
-        
         media_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'media', 'snapshots')
         os.makedirs(media_dir, exist_ok=True)
         frame_filename = f"snapshot_{center.code}_{int(time.time())}.jpg"
@@ -99,10 +143,10 @@ class AIHeadcountEngine:
         cv2.imwrite(frame_path, frame)
         relative_snapshot_url = f"/media/snapshots/{frame_filename}"
 
-        discrepancy = abs(center.expected_capacity - simulated_detected)
+        discrepancy = abs(center.expected_capacity - detected_headcount)
         log = HeadcountLog.objects.create(
             center=center,
-            detected_headcount=simulated_detected,
+            detected_headcount=detected_headcount,
             expected_headcount=center.expected_capacity,
             discrepancy=discrepancy,
             risk_score_snapshot=new_score,
@@ -120,7 +164,7 @@ class AIHeadcountEngine:
                     center=center,
                     assigned_inspector="Inspector Rajesh V. (Flying Squad)",
                     status='DISPATCHED',
-                    trigger_reason=f"CCTV Discrepancy Alert: {discrepancy} missing beneficiaries. Risk Score spiked to {new_score}%",
+                    trigger_reason=f"YOLOv11 CCTV Discrepancy Alert: {discrepancy} missing beneficiaries. Risk Score spiked to {new_score}%",
                 )
 
         if self.channel_layer:
@@ -132,7 +176,7 @@ class AIHeadcountEngine:
                     'center_code': center.code,
                     'center_name': center.name,
                     'expected_capacity': center.expected_capacity,
-                    'current_headcount': simulated_detected,
+                    'current_headcount': detected_headcount,
                     'discrepancy': discrepancy,
                     'risk_score': new_score,
                     'risk_level': new_level,
@@ -160,8 +204,9 @@ class AIHeadcountEngine:
                 try:
                     centers = list(InstituteCenter.objects.all())
                     for center in centers:
-                        self.process_center_keyframe(center.id)
-                        time.sleep(1.0)
+                        if center.code == 'MOSJE-DEL-001':
+                            self.process_center_keyframe(center.id)
+                            time.sleep(1.0)
                 except Exception as e:
                     print(f"[AI Engine Error] {e}")
                 time.sleep(5.0)

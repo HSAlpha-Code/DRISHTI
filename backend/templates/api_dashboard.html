@@ -166,6 +166,23 @@
       box-shadow: 0 2px 8px rgba(29, 78, 216, 0.3);
     }
 
+    /* Center Pill for CCTV view */
+    .cctv-pill {
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #ffffff;
+      border: 1px solid var(--border-light);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cctv-pill.active {
+      background: var(--gov-navy);
+      color: #ffffff;
+      border-color: var(--gov-navy);
+    }
+
     /* Square GIS Map Container (Equal 1:1 Aspect Ratio) */
     .gis-square-map-container {
       aspect-ratio: 1 / 1;
@@ -206,8 +223,8 @@
         <span style="font-size: 14px;">🏛️</span>
         <span>Government of India &bull; Ministry of Social Justice and Empowerment (MoSJE)</span>
       </div>
-      <div style="display: flex; items-center; gap: 16px; font-family: monospace; font-size: 11px;">
-        <span>SIH PROTOTYPE v2.4</span>
+      <div style="display: flex; align-items: center; gap: 16px; font-family: monospace; font-size: 11px;">
+        <span style="background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 4px; color: #fde047;">📷 KAGGLE CCTV EXAM DATASET (8,156 FRAMES)</span>
         <span id="wsStatusBadge" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;">
           <span class="pulse-dot green"></span> WEBSOCKETS LIVE
         </span>
@@ -224,7 +241,7 @@
         </div>
         <div>
           <h1 style="font-size: 18px; font-weight: 800; color: var(--gov-navy); text-transform: uppercase; letter-spacing: -0.01em;">MoSJE Surveillance Engine</h1>
-          <p style="font-size: 12px; color: var(--text-muted);">Automated CCTV Headcount Cross-Checking &amp; Hardware-Verified Site Boundaries</p>
+          <p style="font-size: 12px; color: var(--text-muted);">CCTV Exam Monitor AI Headcount Analytics &amp; Hardware-Verified Site Boundaries</p>
         </div>
       </div>
 
@@ -254,7 +271,7 @@
     <div style="display: flex; flex-direction: column; gap: 14px; border-bottom: 1px solid var(--border-light); padding-bottom: 14px;">
       <div>
         <h2 style="font-size: 20px; font-weight: 800; color: var(--gov-navy);">National Welfare Institute Monitoring Command</h2>
-        <p style="font-size: 13px; color: var(--text-muted);">Continuous AI surveillance, regional GIS spatial geofencing, and automated risk-driven audit dispatches</p>
+        <p style="font-size: 13px; color: var(--text-muted);">Continuous AI surveillance with Kaggle CCTV Exam Monitor dataset, GIS spatial geofencing, and automated risk-driven audit dispatches</p>
       </div>
 
       <!-- Government Navigation Tabs -->
@@ -325,64 +342,99 @@
 
     <!-- TAB 2: CCTV OPENCV ANALYTICS -->
     <div id="tabContent-cctv" class="tab-content">
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+      <div style="display: grid; gap: 16px;">
         
-        <!-- CCTV Frame Feed Viewport -->
-        <div class="gov-card" style="grid-column: span 2;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-            <div>
-              <h3 style="font-size: 16px; font-weight: 700; color: var(--gov-navy);" id="cctvCenterTitle">PM-DAKSH Skill Training Institute [MOSJE-DEL-001]</h3>
-              <p style="font-size: 12px; color: var(--text-muted);">OpenCV &amp; YOLO11 Continuous Headcount Analytics Keyframe Engine</p>
-            </div>
-            <span class="badge badge-normal">Sampling: 1 Frame / 5s</span>
-          </div>
-
-          <div style="position: relative; border-radius: 8px; overflow: hidden; background: #0b1120; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center;">
-            <img id="cctvFrameImg" src="/media/snapshots/snapshot_MOSJE-DEL-001_1789310094.jpg" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; document.getElementById('cctvFallback').style.display='block';" />
-            
-            <div id="cctvFallback" style="display: none; text-align: center; color: #94a3b8; font-size: 14px;">
-              📷 Initializing OpenCV YOLO11 Stream Buffer...
-            </div>
-
-            <div style="position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.85); padding: 4px 10px; border-radius: 6px; font-family: monospace; font-size: 11px; color: #38bdf8;">
-              REC ● LIVE | CAM-01 | SAMPLING ACTIVE
-            </div>
-
-            <div style="position: absolute; bottom: 0; inset-x: 0; background: linear-gradient(transparent, rgba(15, 23, 42, 0.95)); padding: 14px; display: flex; justify-content: space-between; color: white;">
-              <div>
-                <span style="font-size: 10px; text-transform: uppercase; color: #94a3b8; display: block;">YOLO11 Count</span>
-                <span style="font-size: 22px; font-weight: 800; font-family: monospace; color: #4ade80;" id="cctvDetectedVal">54</span>
-              </div>
-              <div>
-                <span style="font-size: 10px; text-transform: uppercase; color: #94a3b8; display: block;">Expected Capacity</span>
-                <span style="font-size: 22px; font-weight: 800; font-family: monospace; color: #f8fafc;" id="cctvExpectedVal">60</span>
-              </div>
-              <div>
-                <span style="font-size: 10px; text-transform: uppercase; color: #94a3b8; display: block;">Discrepancy</span>
-                <span style="font-size: 22px; font-weight: 800; font-family: monospace; color: #facc15;" id="cctvDiscrepancyVal">6</span>
-              </div>
-            </div>
-          </div>
+        <!-- Center Quick Selector Pills -->
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;" id="cctvCenterPills">
+          <!-- Rendered via JS -->
         </div>
 
-        <!-- Attendance Analytics Sidebar -->
-        <div style="display: grid; gap: 16px;">
-          <div class="gov-card">
-            <h3 style="font-size: 15px; font-weight: 700; color: var(--gov-navy); margin-bottom: 12px;">Turnout Metrics</h3>
-            
-            <div style="display: grid; gap: 10px;">
-              <div style="display: flex; justify-content: space-between; font-size: 13px;">
-                <span style="color: var(--text-muted);">Capacity Utilization</span>
-                <b id="turnoutPctVal" style="color: var(--gov-blue);">90%</b>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+          
+          <!-- CCTV Frame Feed Viewport -->
+          <div class="gov-card" style="grid-column: span 2;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+              <div>
+                <h3 style="font-size: 16px; font-weight: 700; color: var(--gov-navy);" id="cctvCenterTitle">PM-DAKSH Skill Training Institute [MOSJE-DEL-001]</h3>
+                <p style="font-size: 12px; color: var(--text-muted);">Kaggle CCTV Exam Monitor Dataset &bull; OpenCV YOLO11 Headcount Engine</p>
               </div>
-              <div style="background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden;">
-                <div id="turnoutProgressBar" style="background: #16a34a; width: 90%; height: 100%;"></div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <span class="badge badge-normal">Sampling: 1 Frame / 5s</span>
+                <button onclick="triggerAiSample()" class="btn btn-outline" style="padding: 4px 10px; font-size: 11px;">🔄 Refresh Feed</button>
               </div>
-              <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">
-                Rolling average Risk Score filter prevents false alerts from temporary frame glitches.
+            </div>
+
+            <div style="position: relative; border-radius: 8px; overflow: hidden; background: #0b1120; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center;">
+              <img id="cctvFrameImg" src="" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; document.getElementById('cctvFallback').style.display='block';" onload="this.style.display='block'; document.getElementById('cctvFallback').style.display='none';" />
+              
+              <div id="cctvFallback" style="display: none; text-align: center; color: #94a3b8; font-size: 14px; padding: 20px;">
+                📷 Processing Kaggle CCTV Exam Monitor keyframe snapshot...
+              </div>
+
+              <div style="position: absolute; top: 12px; left: 12px; background: rgba(15, 23, 42, 0.85); padding: 6px 12px; border-radius: 6px; font-family: monospace; font-size: 11px; color: #38bdf8; border: 1px solid rgba(255,255,255,0.1);">
+                REC ● LIVE | CAM-01 | <span id="cctvCodeHud">MOSJE-DEL-001</span> | KAGGLE DATASET ACTIVE
+              </div>
+
+              <div style="position: absolute; bottom: 0; inset-x: 0; background: linear-gradient(transparent, rgba(15, 23, 42, 0.95)); padding: 14px; display: flex; justify-content: space-between; color: white;">
+                <div>
+                  <span style="font-size: 10px; text-transform: uppercase; color: #94a3b8; display: block;">YOLO11 Examinee Count</span>
+                  <span style="font-size: 24px; font-weight: 800; font-family: monospace; color: #4ade80;" id="cctvDetectedVal">--</span>
+                </div>
+                <div>
+                  <span style="font-size: 10px; text-transform: uppercase; color: #94a3b8; display: block;">Expected Capacity</span>
+                  <span style="font-size: 24px; font-weight: 800; font-family: monospace; color: #f8fafc;" id="cctvExpectedVal">--</span>
+                </div>
+                <div>
+                  <span style="font-size: 10px; text-transform: uppercase; color: #94a3b8; display: block;">Discrepancy</span>
+                  <span style="font-size: 24px; font-weight: 800; font-family: monospace; color: #facc15;" id="cctvDiscrepancyVal">--</span>
+                </div>
               </div>
             </div>
           </div>
+
+          <!-- Attendance Analytics Sidebar -->
+          <div style="display: grid; gap: 16px;">
+            
+            <div class="gov-card">
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--gov-navy); margin-bottom: 12px;">Active Center Overview</h3>
+              <div style="font-size: 12px; display: grid; gap: 8px;">
+                <div>
+                  <span style="color: var(--text-muted); display: block; font-size: 11px;">Institute Code</span>
+                  <b id="cctvSidebarCode" style="font-family: monospace; color: var(--gov-blue);">--</b>
+                </div>
+                <div>
+                  <span style="color: var(--text-muted); display: block; font-size: 11px;">Location</span>
+                  <span id="cctvSidebarLocation">--</span>
+                </div>
+                <div>
+                  <span style="color: var(--text-muted); display: block; font-size: 11px;">AI Risk Assessment</span>
+                  <span id="cctvSidebarRisk" class="badge badge-normal">--</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="gov-card">
+              <h3 style="font-size: 15px; font-weight: 700; color: var(--gov-navy); margin-bottom: 12px;">Turnout Metrics</h3>
+              
+              <div style="display: grid; gap: 10px;">
+                <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                  <span style="color: var(--text-muted);">Capacity Utilization</span>
+                  <b id="turnoutPctVal" style="color: var(--gov-blue);">--</b>
+                </div>
+                <div style="background: #e2e8f0; height: 10px; border-radius: 5px; overflow: hidden;">
+                  <div id="turnoutProgressBar" style="background: #16a34a; width: 0%; height: 100%; transition: width 0.4s;"></div>
+                </div>
+                <div style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">
+                  Real-time exam hall candidate detection &amp; rolling discrepancy score cross-check.
+                </div>
+
+                <button id="cctvSpotCallBtn" onclick="" class="btn btn-gov" style="width: 100%; justify-content: center; margin-top: 8px;">
+                  📞 Launch WebRTC Spot Interview
+                </button>
+              </div>
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -394,7 +446,7 @@
         
         <!-- Task Feed Queue -->
         <div class="gov-card" style="grid-column: span 2;">
-          <div style="display: flex; items-center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
             <h3 style="font-size: 16px; font-weight: 700; color: var(--gov-navy);">Unannounced Audit Dispatch Command</h3>
             <span class="badge badge-critical" id="dispatchCountBadge">1 ACTIVE DISPATCH</span>
           </div>
@@ -468,7 +520,7 @@
     let centersData = {{ centers_json|safe }};
     let auditTasksData = [];
     let activeTab = 'gis';
-    let selectedCenterForCctv = centersData[0];
+    let selectedCenterId = centersData.length > 0 ? centersData[0].id : null;
 
     // Initialize Leaflet Map
     const map = L.map('map').setView([22.5, 78.9], 5);
@@ -512,6 +564,63 @@
           `)
           .addTo(map);
       });
+    }
+
+    function selectCenterForCctv(cId) {
+      selectedCenterId = cId;
+      renderCctvView();
+    }
+
+    function renderCctvView() {
+      const pillsContainer = document.getElementById('cctvCenterPills');
+      if (pillsContainer) {
+        pillsContainer.innerHTML = '<b>Select CCTV Feed:</b> ';
+        centersData.forEach(c => {
+          const activeClass = c.id === selectedCenterId ? 'active' : '';
+          pillsContainer.innerHTML += `
+            <button class="cctv-pill ${activeClass}" onclick="selectCenterForCctv(${c.id})">
+              📹 ${c.name} (${c.code})
+            </button>
+          `;
+        });
+      }
+
+      const c = centersData.find(item => item.id === selectedCenterId) || centersData[0];
+      if (!c) return;
+
+      document.getElementById('cctvCenterTitle').innerText = `${c.name} [${c.code}]`;
+      document.getElementById('cctvCodeHud').innerText = c.code;
+
+      const imgEl = document.getElementById('cctvFrameImg');
+      if (c.snapshot_url) {
+        const cacheBuster = c.snapshot_url.includes('?') ? '&t=' : '?t=';
+        imgEl.src = c.snapshot_url + cacheBuster + new Date().getTime();
+      } else {
+        imgEl.src = "/media/snapshots/test_dataset_output.jpg";
+      }
+
+      const detected = c.current_headcount || 0;
+      const expected = c.expected_capacity || 1;
+      const discrepancy = Math.abs(expected - detected);
+      const pct = Math.min(100, Math.round((detected / expected) * 100));
+
+      document.getElementById('cctvDetectedVal').innerText = detected;
+      document.getElementById('cctvExpectedVal').innerText = expected;
+      document.getElementById('cctvDiscrepancyVal').innerText = discrepancy;
+
+      document.getElementById('cctvSidebarCode').innerText = c.code;
+      document.getElementById('cctvSidebarLocation').innerText = `${c.district}, ${c.state}`;
+      
+      const riskEl = document.getElementById('cctvSidebarRisk');
+      riskEl.innerText = `${c.risk_score}% Risk (${c.risk_level || 'NORMAL'})`;
+      riskEl.className = c.risk_score >= 65 ? 'badge badge-critical' : c.risk_score >= 35 ? 'badge badge-warning' : 'badge badge-normal';
+
+      document.getElementById('turnoutPctVal').innerText = `${pct}%`;
+      const bar = document.getElementById('turnoutProgressBar');
+      bar.style.width = `${pct}%`;
+      bar.style.background = pct >= 80 ? '#16a34a' : pct >= 50 ? '#d97706' : '#dc2626';
+
+      document.getElementById('cctvSpotCallBtn').onclick = () => openSpotCall(c.name);
     }
 
     function renderCenterDirectory() {
@@ -583,7 +692,7 @@
               <span class="badge ${t.status === 'COMPLETED' ? 'badge-normal' : 'badge-critical'}">${t.status}</span>
             </div>
             <h4 style="font-size: 14px; font-weight: 700; color: var(--gov-navy);">${t.center_name || 'Institute Center'}</h4>
-            <p style="font-size: 12px; color: var(--text-body); bg: #f8fafc; padding: 6px; border-radius: 4px;">⚠️ ${t.trigger_reason}</p>
+            <p style="font-size: 12px; color: var(--text-body); background: #f8fafc; padding: 6px; border-radius: 4px;">⚠️ ${t.trigger_reason}</p>
             <div style="font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between;">
               <span>Officer: <b>${t.assigned_inspector}</b></span>
               <span>Dispatched: ${new Date(t.dispatched_at).toLocaleTimeString()}</span>
@@ -603,6 +712,8 @@
 
       if (tabName === 'gis') {
         setTimeout(() => map.invalidateSize(), 200);
+      } else if (tabName === 'cctv') {
+        renderCctvView();
       }
     }
 
@@ -611,7 +722,18 @@
         const res = await fetch('/api/ai/trigger/', { method: 'POST' });
         const data = await res.json();
         if (data.status === 'SUCCESS') {
-          window.location.reload();
+          if (data.samples) {
+            data.samples.forEach(s => {
+              const c = centersData.find(item => item.code === s.center_code || item.id === s.center_id);
+              if (c) {
+                c.current_headcount = s.detected;
+                c.risk_score = s.risk_score;
+                c.snapshot_url = s.snapshot_url;
+              }
+            });
+          }
+          renderCenterDirectory();
+          renderCctvView();
         }
       } catch (err) {
         console.error(err);
@@ -665,11 +787,12 @@
           const p = msg.data;
           centersData = centersData.map(c => {
             if (c.code === p.center_code || c.id === p.center_id) {
-              return { ...c, current_headcount: p.current_headcount, risk_score: p.risk_score, risk_level: p.risk_level };
+              return { ...c, current_headcount: p.current_headcount, risk_score: p.risk_score, risk_level: p.risk_level, snapshot_url: p.snapshot_url };
             }
             return c;
           });
           renderCenterDirectory();
+          renderCctvView();
           if (p.unannounced_dispatch_triggered) {
             document.getElementById('alertText').innerText = `${p.center_name} spiked to Risk Score ${p.risk_score}%`;
             document.getElementById('alertBanner').style.display = 'block';
@@ -682,6 +805,7 @@
     // Init Page
     renderMapMarkers();
     renderCenterDirectory();
+    renderCctvView();
     fetchTasks();
   </script>
 </body>
