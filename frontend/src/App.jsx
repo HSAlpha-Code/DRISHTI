@@ -4,9 +4,7 @@ import { GISMap } from './components/GISMap';
 import { CCTVAnalytics } from './components/CCTVAnalytics';
 import { DispatchFeed } from './components/DispatchFeed';
 import { WebRTCCallModal } from './components/WebRTCCallModal';
-import { MobileAuditSimulator } from './components/MobileAuditSimulator';
-import { AuditTrail } from './components/AuditTrail';
-import { ShieldAlert, Map, Camera, Send, Smartphone, Lock, Radio, PhoneCall } from 'lucide-react';
+import { Shield, Map, Camera, Send, Radio, Landmark } from 'lucide-react';
 
 function DashboardContent() {
   const { isConnected, latestAlert } = useWebSocket();
@@ -15,31 +13,42 @@ function DashboardContent() {
   const [activeCallCenter, setActiveCallCenter] = useState(null);
 
   return (
-    <div className="min-h-screen bg-[#0a0e17] text-slate-100 flex flex-col">
-      {/* Top Header Navbar */}
-      <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
+    <div className="min-h-screen bg-[#070d19] text-slate-100 flex flex-col">
+      
+      {/* Official Government Top Bar */}
+      <div className="bg-[#050914] border-b border-slate-800 text-[11px] text-slate-400 py-1.5 px-4">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-2 font-medium">
+            <Landmark className="w-3.5 h-3.5 text-amber-500" />
+            <span>Government of India &bull; Ministry of Social Justice and Empowerment (MoSJE)</span>
+          </div>
+          <span className="font-mono text-slate-500 text-[10px]">Official Audit &amp; Surveillance Portal</span>
+        </div>
+      </div>
+
+      {/* Main Institutional Header Navbar */}
+      <header className="border-b border-slate-800 bg-[#0f1a30]/90 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-600 p-0.5 shadow-lg shadow-cyan-500/20">
-              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                <ShieldAlert className="w-5 h-5 text-cyan-400" />
-              </div>
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-blue-700 via-indigo-800 to-slate-900 border border-blue-500/30 flex items-center justify-center shadow-md">
+              <Shield className="w-5 h-5 text-amber-400" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-base font-black tracking-tight text-slate-100 uppercase">MoSJE Surveillance Engine</h1>
-                <span className="text-[10px] font-mono font-bold bg-cyan-950 text-cyan-400 border border-cyan-800/60 px-2 py-0.5 rounded">
+                <h1 className="text-base font-bold tracking-tight text-slate-100 uppercase">MoSJE Surveillance Engine</h1>
+                <span className="text-[10px] font-mono font-bold bg-blue-950 text-blue-300 border border-blue-800/80 px-2 py-0.5 rounded">
                   SIH PROTOTYPE v2.4
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400">Automated CCTV Headcount Cross-Checking &amp; Hardware Geo-Locked Inspections</p>
+              <p className="text-[11px] text-slate-400">Automated CCTV Headcount Cross-Checking &amp; Hardware-Verified Site Boundaries</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-xs bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full">
+          {/* System Status Indicator */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 text-xs bg-slate-900/90 border border-slate-700/80 px-3.5 py-1.5 rounded-lg shadow-inner">
               <span className={`pulse-dot ${isConnected ? 'green' : 'red'}`}></span>
-              <span className="text-slate-300 font-medium">{isConnected ? 'LIVE WEBSOCKETS CONNECTED' : 'OFFLINE'}</span>
+              <span className="text-slate-200 font-semibold tracking-wide">{isConnected ? 'LIVE WEBSOCKETS CONNECTED' : 'OFFLINE'}</span>
             </div>
           </div>
         </div>
@@ -47,26 +56,35 @@ function DashboardContent() {
 
       {/* Alert Notification Ticker Banner */}
       {latestAlert && (
-        <div className="bg-gradient-to-r from-red-950 via-rose-900 to-red-950 border-b border-red-800/50 py-2 px-4 text-xs flex items-center justify-between text-red-200 animate-pulse">
+        <div className="bg-red-950/80 border-b border-red-800/80 py-2 px-4 text-xs flex items-center justify-between text-red-200">
           <div className="flex items-center gap-2">
-            <Radio className="w-4 h-4 text-red-400" />
-            <span className="font-bold">AUTOMATED UNANNOUNCED DISPATCH TRIGGERED:</span>
+            <Radio className="w-4 h-4 text-red-400 animate-pulse" />
+            <span className="font-bold">UNANNOUNCED AUDIT DISPATCH TRIGGERED:</span>
             <span>{latestAlert.center_name} spiked to Risk Score {latestAlert.risk_score}% ({latestAlert.task_id})</span>
           </div>
           <span className="font-mono text-[10px] text-red-300">{latestAlert.timestamp}</span>
         </div>
       )}
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 space-y-6">
-        {/* Navigation Tabs Bar */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-slate-800/60">
+      {/* Main Application Container */}
+      <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+        
+        {/* Page Title & Subtitle */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
+          <div>
+            <h2 className="text-xl font-bold text-slate-100">National Welfare Institute Monitoring Command</h2>
+            <p className="text-xs text-slate-400">Continuous AI surveillance, regional GIS spatial geofencing, and automated risk-driven audit dispatches</p>
+          </div>
+        </div>
+
+        {/* Standardized Government Navigation Tabs */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-slate-800">
           <button
             onClick={() => setActiveTab('gis_map')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-xs transition whitespace-nowrap ${
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
               activeTab === 'gis_map'
-                ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/20'
-                : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800/60'
+                ? 'bg-blue-700 text-white shadow-md shadow-blue-900/40 border border-blue-500/50'
+                : 'bg-slate-900/70 text-slate-400 hover:text-slate-200 border border-slate-800'
             }`}
           >
             <Map className="w-4 h-4" /> GIS Boundary Map
@@ -74,10 +92,10 @@ function DashboardContent() {
 
           <button
             onClick={() => setActiveTab('cctv')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-xs transition whitespace-nowrap ${
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
               activeTab === 'cctv'
-                ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/20'
-                : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800/60'
+                ? 'bg-blue-700 text-white shadow-md shadow-blue-900/40 border border-blue-500/50'
+                : 'bg-slate-900/70 text-slate-400 hover:text-slate-200 border border-slate-800'
             }`}
           >
             <Camera className="w-4 h-4" /> CCTV OpenCV Analytics
@@ -85,35 +103,13 @@ function DashboardContent() {
 
           <button
             onClick={() => setActiveTab('dispatches')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-xs transition whitespace-nowrap ${
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-xs transition-all whitespace-nowrap ${
               activeTab === 'dispatches'
-                ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/20'
-                : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800/60'
+                ? 'bg-blue-700 text-white shadow-md shadow-blue-900/40 border border-blue-500/50'
+                : 'bg-slate-900/70 text-slate-400 hover:text-slate-200 border border-slate-800'
             }`}
           >
             <Send className="w-4 h-4" /> Dynamic Dispatches
-          </button>
-
-          <button
-            onClick={() => setActiveTab('mobile_app')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-xs transition whitespace-nowrap ${
-              activeTab === 'mobile_app'
-                ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/20'
-                : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800/60'
-            }`}
-          >
-            <Smartphone className="w-4 h-4 text-emerald-400" /> Flutter Mobile App
-          </button>
-
-          <button
-            onClick={() => setActiveTab('audit_trail')}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-xs transition whitespace-nowrap ${
-              activeTab === 'audit_trail'
-                ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/20'
-                : 'bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-slate-800/60'
-            }`}
-          >
-            <Lock className="w-4 h-4 text-purple-400" /> SHA-256 Audit Integrity
           </button>
         </div>
 
@@ -135,14 +131,6 @@ function DashboardContent() {
         {activeTab === 'dispatches' && (
           <DispatchFeed onStartCall={(center) => setActiveCallCenter(center)} />
         )}
-
-        {activeTab === 'mobile_app' && (
-          <MobileAuditSimulator />
-        )}
-
-        {activeTab === 'audit_trail' && (
-          <AuditTrail />
-        )}
       </main>
 
       {/* Agora WebRTC Spot Call Modal */}
@@ -153,9 +141,10 @@ function DashboardContent() {
         />
       )}
 
-      {/* Footer */}
-      <footer className="border-t border-slate-800/60 py-4 text-center text-xs text-slate-500">
-        Smart India Hackathon Prototype &bull; Ministry of Social Justice and Empowerment (MoSJE) Monitoring Platform
+      {/* Institutional Footer */}
+      <footer className="border-t border-slate-800/80 bg-[#050914] py-5 px-4 text-center text-xs text-slate-400 space-y-1">
+        <p className="font-semibold text-slate-300">&copy; Ministry of Social Justice and Empowerment (MoSJE) &bull; Government of India</p>
+        <p className="text-[11px] text-slate-500">Smart India Hackathon Prototype &bull; Automated Anti-Collusion Surveillance &amp; Verification System</p>
       </footer>
     </div>
   );
