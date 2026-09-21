@@ -1,11 +1,12 @@
 import os
+import dj_database_url
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-sih-prototype-super-secret-key-mosje-audit'
 
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = ['*']
 
@@ -39,6 +40,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 ROOT_URLCONF = 'sih_backend.urls'
 
 TEMPLATES = [
@@ -61,10 +66,10 @@ WSGI_APPLICATION = 'sih_backend.wsgi.application'
 ASGI_APPLICATION = 'sih_backend.asgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600
+    )
 }
 
 CHANNEL_LAYERS = {
