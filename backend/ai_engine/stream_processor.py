@@ -18,22 +18,25 @@ class AIHeadcountEngine:
         self.thread = None
         self.yolo_model = None
         self.video_cap = None
+        self.lock = threading.Lock()
 
     def get_yolo_model(self):
         """
         Lazy-loads the Ultralytics YOLOv11 model.
         """
         if self.yolo_model is None:
-            try:
-                from ultralytics import YOLO
-                model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'yolo11n.pt')
-                if not os.path.exists(model_path):
-                    model_path = 'yolo11n.pt'
-                self.yolo_model = YOLO(model_path)
-                print(f"[AI Engine] Active YOLOv11 model initialized successfully.")
-            except Exception as e:
-                print(f"[AI Engine Warning] Failed to load YOLOv11 model: {e}")
-                self.yolo_model = False
+            with self.lock:
+                if self.yolo_model is None:
+                    try:
+                        from ultralytics import YOLO
+                        model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'yolo11n.pt')
+                        if not os.path.exists(model_path):
+                            model_path = 'yolo11n.pt'
+                        self.yolo_model = YOLO(model_path)
+                        print(f"[AI Engine] Active YOLOv11 model initialized successfully.")
+                    except Exception as e:
+                        print(f"[AI Engine Warning] Failed to load YOLOv11 model: {e}")
+                        self.yolo_model = False
         return self.yolo_model if self.yolo_model is not False else None
 
     def process_video_frame_yolo(self, center_code: str, expected_count: int):
@@ -41,25 +44,25 @@ class AIHeadcountEngine:
         Actively runs YOLOv11 model inference on a video frame from simulated_classroom_cctv.mp4.
         Returns (frame, detected_person_count).
         """
-        if self.video_cap is None or not self.video_cap.isOpened():
-            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-            video_path = os.path.join(base_dir, 'resources', 'simulated_classroom_cctv.mp4')
-            self.video_cap = cv2.VideoCapture(video_path)
-            if not self.video_cap.isOpened():
-                print(f"[AI Engine Error] Could not open video source {video_path}")
-                # Fallback black canvas
-                frame = np.zeros((480, 854, 3), dtype=np.uint8)
-                cv2.rectangle(frame, (0, 0), (854, 480), (20, 25, 30), -1)
-                return frame, 0
+        with self.lock:
+            if self.video_cap is None or not self.video_cap.isOpened():
+                base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+                video_path = os.path.join(base_dir, 'resources', 'simulated_classroom_cctv.mp4')
+                self.video_cap = cv2.VideoCapture(video_path)
+                if not self.video_cap.isOpened():
+                    print(f"[AI Engine Error] Could not open video source {video_path}")
+                    frame = np.zeros((480, 854, 3), dtype=np.uint8)
+                    cv2.rectangle(frame, (0, 0), (854, 480), (20, 25, 30), -1)
+                    return frame, 0
 
-        ret, frame = self.video_cap.read()
-        if not ret:
-            # Restart video
-            self.video_cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
             ret, frame = self.video_cap.read()
             if not ret:
-                frame = np.zeros((480, 854, 3), dtype=np.uint8)
-                return frame, 0
+                # Restart video
+                self.video_cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+                ret, frame = self.video_cap.read()
+                if not ret:
+                    frame = np.zeros((480, 854, 3), dtype=np.uint8)
+                    return frame, 0
 
         # Resize for consistent web display
         frame = cv2.resize(frame, (854, 480))
@@ -216,5 +219,9 @@ class AIHeadcountEngine:
 
     def stop_sampling_loop(self):
         self.is_running = False
+        with self.lock:
+            if self.video_cap is not None:
+                self.video_cap.release()
+                self.video_cap = None
 
 ai_engine_instance = AIHeadcountEngine()

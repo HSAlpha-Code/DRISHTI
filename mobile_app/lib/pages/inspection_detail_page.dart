@@ -224,7 +224,7 @@ class _InspectionDetailPageState extends State<InspectionDetailPage> {
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton.icon(
-                      onPressed: isCheckingSiteLocation ? null : _verifyHardwareGpsCheck,
+                      onPressed: isCheckingSiteLocation ? null : _verifyOnSiteLocation,
                       icon: isCheckingSiteLocation
                           ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2.5))
                           : Icon(isOnSiteVerified ? Icons.check_circle : Icons.my_location, size: 24),
@@ -494,9 +494,5 @@ class _InspectionDetailPageState extends State<InspectionDetailPage> {
         ),
       ),
     );
-  }
-
-  void _verifyHardwareGpsCheck() {
-    _verifyOnSiteLocation();
   }
 }

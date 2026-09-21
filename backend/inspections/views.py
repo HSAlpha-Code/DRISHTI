@@ -1,4 +1,4 @@
-import datetime
+from django.utils import timezone
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -50,7 +50,7 @@ class AuditTaskViewSet(viewsets.ModelViewSet):
         task.inspector_longitude = lng
         task.payload_json = payload
         task.sha256_hash = submitted_hash or computed_hash
-        task.completed_at = datetime.datetime.now()
+        task.completed_at = timezone.now()
         if photo_watermark:
             task.photo_watermark_path = photo_watermark
             

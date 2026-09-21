@@ -9,3 +9,5 @@ geopy>=2.4.0
 django-cors-headers>=4.3.0
 pillow>=10.0.0
 requests>=2.31.0
+dj-database-url>=3.0.0
+whitenoise>=6.0.0

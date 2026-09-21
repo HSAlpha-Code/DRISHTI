@@ -28,41 +28,47 @@ class InstituteCenter(models.Model):
         Hardware-verified site boundary check using Shapely geometry.
         Returns True if the inspector's hardware GPS coordinate is inside or within tolerance.
         """
+        from geopy.distance import geodesic
+
         try:
             coords = self.boundary_geojson
             if isinstance(coords, str):
                 coords = json.loads(coords)
             
-            # GeoJSON coordinates are usually [lng, lat]
             if isinstance(coords, dict) and 'coordinates' in coords:
-                poly_coords = coords['coordinates'][0]
-            elif isinstance(coords, list):
-                poly_coords = coords
-            else:
-                poly_coords = []
-                
+                coords = coords['coordinates']
+
+            # Unwrap nested rings if present
+            while isinstance(coords, list) and len(coords) > 0 and isinstance(coords[0], list) and len(coords[0]) > 0 and isinstance(coords[0][0], list):
+                coords = coords[0]
+
+            poly_coords = []
+            if isinstance(coords, list):
+                for p in coords:
+                    if isinstance(p, (list, tuple)) and len(p) >= 2:
+                        poly_coords.append((float(p[0]), float(p[1])))
+
             if len(poly_coords) < 3:
-                # Fallback to radius distance check from center point
-                from geopy.distance import geodesic
                 dist = geodesic((lat, lng), (self.latitude, self.longitude)).meters
                 return dist <= tolerance_meters
 
             # Create Shapely Polygon (expects (lng, lat) tuples)
-            polygon = Polygon([(p[0], p[1]) for p in poly_coords])
+            polygon = Polygon(poly_coords)
             point = Point(lng, lat)
             
-            if polygon.contains(point):
+            if polygon.contains(point) or polygon.touches(point):
                 return True
             
             # Check proximity to boundary in meters (approx 0.001 deg ~ 111m)
             dist_deg = polygon.distance(point)
             dist_meters = dist_deg * 111000.0
             return dist_meters <= tolerance_meters
-        except Exception as e:
-            # Fallback to direct Euclidean distance threshold
-            import math
-            d = math.sqrt((lat - self.latitude)**2 + (lng - self.longitude)**2)
-            return d <= 0.005 # ~500m fallback
+        except Exception:
+            try:
+                dist = geodesic((lat, lng), (self.latitude, self.longitude)).meters
+                return dist <= tolerance_meters
+            except Exception:
+                return False
 
     def recalculate_risk_score(self, detected_headcount: int):
         """
