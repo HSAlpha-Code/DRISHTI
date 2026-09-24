@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
-import 'pages/dashboard_page.dart';
+import 'screens/landing_screen.dart';
+import 'screens/ngo/ngo_dashboard_screen.dart';
+import 'screens/ngo/ngo_register_screen.dart';
+import 'screens/admin/admin_shell.dart';
+import 'screens/inspector/inspector_flow_screen.dart';
+import 'screens/inspector/inspector_portal_screen.dart';
 
 void main() {
-  runApp(const SihInspectorApp());
+  runApp(const DrishtiApp());
 }
 
-class SihInspectorApp extends StatelessWidget {
-  const SihInspectorApp({super.key});
+class DrishtiApp extends StatelessWidget {
+  const DrishtiApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MoSJE Field Inspector App',
+      title: 'Drishti Platform',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,
@@ -26,7 +31,57 @@ class SihInspectorApp extends StatelessWidget {
         fontFamily: 'Roboto',
         useMaterial3: true,
       ),
-      home: const DashboardPage(),
+      initialRoute: '/',
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(
+              builder: (context) => LandingScreen(
+                onSelectNgoPortal: () =>
+                    Navigator.pushNamed(context, '/ngo/dashboard'),
+                onSelectNgoRegister: () =>
+                    Navigator.pushNamed(context, '/ngo/register'),
+                onSelectAdminPortal: () =>
+                    Navigator.pushNamed(context, '/admin/dashboard'),
+                onSelectInspectorPortal: () =>
+                    Navigator.pushNamed(context, '/inspector'),
+              ),
+            );
+          case '/ngo/dashboard':
+            return MaterialPageRoute(
+              builder: (context) => NgoDashboardScreen(
+                onSwitchPortal: () =>
+                    Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false),
+              ),
+            );
+          case '/ngo/register':
+            return MaterialPageRoute(
+              builder: (context) => NgoRegisterScreen(
+                onCancel: () => Navigator.pop(context),
+                onRegistered: () => Navigator.pushReplacementNamed(
+                  context, '/ngo/dashboard'),
+              ),
+            );
+          case '/admin/dashboard':
+            return MaterialPageRoute(
+              builder: (context) => const AdminShell(),
+            );
+          case '/inspector':
+            return MaterialPageRoute(
+              builder: (context) => const InspectorPortalScreen(),
+            );
+          case '/inspector/flow':
+            return MaterialPageRoute(
+              builder: (context) => const InspectorFlowScreen(),
+            );
+          default:
+            return MaterialPageRoute(
+              builder: (context) => const Scaffold(
+                body: Center(child: Text('Page not found')),
+              ),
+            );
+        }
+      },
     );
   }
 }

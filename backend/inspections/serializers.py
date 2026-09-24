@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from inspections.models import AuditTask
+from inspections.models import AuditTask, Inspection, AuditLog
 
 class AuditTaskSerializer(serializers.ModelSerializer):
     center_name = serializers.CharField(source='center.name', read_only=True)
@@ -10,4 +10,17 @@ class AuditTaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AuditTask
+        fields = '__all__'
+
+class InspectionSerializer(serializers.ModelSerializer):
+    organization_name = serializers.CharField(source='organization.name', read_only=True)
+    project_name = serializers.CharField(source='project.name', read_only=True)
+
+    class Meta:
+        model = Inspection
+        fields = '__all__'
+
+class AuditLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AuditLog
         fields = '__all__'
