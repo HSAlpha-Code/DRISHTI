@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../widgets/common_ui.dart';
 import '../../services/drishti_service.dart';
+import '../admin/inspection_review_dialog.dart';
 
 class InspectorPortalScreen extends StatelessWidget {
   const InspectorPortalScreen({super.key});
@@ -26,128 +27,213 @@ class InspectorPortalScreen extends StatelessWidget {
               constraints: const BoxConstraints(maxWidth: 1000),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                if (currentTask != null) ...[
-                  const Text(
-                    'Current Assigned Task',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: GovColors.navy),
-                  ),
-                  const SizedBox(height: 8),
-                  Card(
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          final isNarrow = constraints.maxWidth < 600;
-                          final infoBlock = Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    if (currentTask != null) ...[
+                      const Text(
+                        'Current Assigned Task',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: GovColors.navy),
+                      ),
+                      const SizedBox(height: 8),
+                      Card(
+                        elevation: 1,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              final isNarrow = constraints.maxWidth < 600;
+                              final infoBlock = Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Icon(Icons.assignment, color: GovColors.navy, size: 22),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      currentTask.projectName,
-                                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.assignment, color: GovColors.navy, size: 22),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          currentTask.projectName,
+                                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    '${currentTask.orgName} — ${currentTask.reason}',
+                                    style: const TextStyle(fontSize: 13, color: GovColors.textDark),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    'Assigned: ${currentTask.assignedDate}',
+                                    style: const TextStyle(fontSize: 12, color: GovColors.textMuted),
+                                  ),
+                                ],
+                              );
+
+                              final beginBtn = ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: GovColors.navy,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                ),
+                                onPressed: () => Navigator.pushNamed(context, '/inspector/flow'),
+                                icon: const Icon(Icons.play_arrow, size: 18),
+                                label: const Text('Begin Inspection'),
+                              );
+
+                              return isNarrow
+                                  ? Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        infoBlock,
+                                        const SizedBox(height: 12),
+                                        beginBtn,
+                                      ],
+                                    )
+                                  : Row(
+                                      children: [
+                                        Expanded(child: infoBlock),
+                                        const SizedBox(width: 16),
+                                        beginBtn,
+                                      ],
+                                    );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                    ] else ...[
+                      const Text(
+                        'Current Assigned Task',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: GovColors.navy),
+                      ),
+                      const SizedBox(height: 8),
+                      Card(
+                        elevation: 1,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              final isNarrow = constraints.maxWidth < 600;
+                              final infoBlock = Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: GovColors.greenBg,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Icon(Icons.check_circle_outline, color: GovColors.green, size: 28),
+                                  ),
+                                  const SizedBox(width: 14),
+                                  const Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'All Field Audits Completed',
+                                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: GovColors.textDark),
+                                        ),
+                                        SizedBox(height: 2),
+                                        Text(
+                                          'Latest submission cryptographically signed with SHA-256 and queued for MoSJE review.',
+                                          style: TextStyle(fontSize: 12, color: GovColors.textMuted),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                '${currentTask.orgName} — ${currentTask.reason}',
-                                style: const TextStyle(fontSize: 13, color: GovColors.textDark),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'Assigned: ${currentTask.assignedDate}',
-                                style: const TextStyle(fontSize: 12, color: GovColors.textMuted),
-                              ),
-                            ],
-                          );
+                              );
 
-                          final beginBtn = ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: GovColors.navy,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                            ),
-                            onPressed: () => Navigator.pushNamed(context, '/inspector/flow'),
-                            icon: const Icon(Icons.play_arrow, size: 18),
-                            label: const Text('Begin Inspection'),
-                          );
+                              final assignBtn = ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: GovColors.navy,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                ),
+                                onPressed: () => service.assignSampleTask(),
+                                icon: const Icon(Icons.add_task, size: 16),
+                                label: const Text('Assign Next Task (Demo)'),
+                              );
 
-                          return isNarrow
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    infoBlock,
-                                    const SizedBox(height: 12),
-                                    beginBtn,
-                                  ],
-                                )
-                              : Row(
-                                  children: [
-                                    Expanded(child: infoBlock),
-                                    const SizedBox(width: 16),
-                                    beginBtn,
-                                  ],
-                                );
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                ],
-                const Text(
-                  'Past Inspections',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: GovColors.navy),
-                ),
-                const SizedBox(height: 8),
-                Expanded(
-                  child: pastInspections.isEmpty
-                      ? const Center(child: Text('No past inspections yet.'))
-                      : ListView.builder(
-                          itemCount: pastInspections.length,
-                          itemBuilder: (context, index) {
-                            final insp = pastInspections[index];
-                            return Card(
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                side: const BorderSide(color: GovColors.border),
-                              ),
-                              margin: const EdgeInsets.only(bottom: 8),
-                              child: ListTile(
-                                leading: Icon(
-                                  insp.overallResult == 'Verified' ? Icons.check_circle : Icons.warning_amber_rounded,
-                                  color: insp.overallResult == 'Verified' ? GovColors.green : GovColors.amber,
-                                ),
-                                title: Text(insp.projectName, style: const TextStyle(fontWeight: FontWeight.w600)),
-                                subtitle: Text(
-                                  '${insp.orgName} — ${insp.overallResult}\nSubmitted: ${insp.submittedDate ?? "—"}',
-                                ),
-                                isThreeLine: true,
-                                trailing: const Icon(Icons.arrow_forward_ios, size: 14),
-                                onTap: () {},
-                              ),
-                            );
-                          },
+                              return isNarrow
+                                  ? Column(
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        infoBlock,
+                                        const SizedBox(height: 12),
+                                        assignBtn,
+                                      ],
+                                    )
+                                  : Row(
+                                      children: [
+                                        Expanded(child: infoBlock),
+                                        const SizedBox(width: 14),
+                                        assignBtn,
+                                      ],
+                                    );
+                            },
+                          ),
                         ),
+                      ),
+                      const SizedBox(height: 24),
+                    ],
+                    const Text(
+                      'Past Inspections',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: GovColors.navy),
+                    ),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child: pastInspections.isEmpty
+                          ? const Center(child: Text('No past inspections yet.'))
+                          : ListView.builder(
+                              itemCount: pastInspections.length,
+                              itemBuilder: (context, index) {
+                                final insp = pastInspections[index];
+                                return Card(
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    side: const BorderSide(color: GovColors.border),
+                                  ),
+                                  margin: const EdgeInsets.only(bottom: 8),
+                                  child: ListTile(
+                                    leading: Icon(
+                                      insp.overallResult == 'Verified' ? Icons.check_circle : Icons.warning_amber_rounded,
+                                      color: insp.overallResult == 'Verified' ? GovColors.green : GovColors.amber,
+                                    ),
+                                    title: Text(insp.projectName, style: const TextStyle(fontWeight: FontWeight.w600)),
+                                    subtitle: Text(
+                                      '${insp.orgName} — ${insp.overallResult}\nSubmitted: ${insp.submittedDate ?? "—"} • Hash: ${insp.sha256Hash?.substring(0, 12) ?? "Verified"}...',
+                                    ),
+                                    isThreeLine: true,
+                                    trailing: const Icon(Icons.arrow_forward_ios, size: 14),
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (ctx) => InspectionReviewDialog(
+                                          inspection: insp,
+                                          onUpdated: () {},
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      );
-    },
+          );
+        },
   ),
 );
   }

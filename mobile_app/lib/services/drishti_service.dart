@@ -432,6 +432,34 @@ class DrishtiService extends ChangeNotifier {
     notifyListeners();
   }
 
+  void assignSampleTask() {
+    final nextId = 'INSP-MOSJE-2026-${(_inspections.length + 1).toString().padLeft(3, '0')}';
+    final sample = InspectionModel(
+      inspectionId: nextId,
+      orgId: 'NGO-DEL-01',
+      orgName: 'Akshaya Vidya Foundation',
+      projectId: 'PRJ-DEL-2025-01',
+      projectName: 'PM-DAKSH Divyangjan Skill Center',
+      assignedInspector: 'Inspector Rajesh V.',
+      status: 'Assigned',
+      overallResult: 'Pending Inspection',
+      governmentReview: 'Pending',
+      assignedDate: DateTime.now().toString().split(' ')[0],
+      submittedDate: null,
+      reason: 'Automated AI Dispatch: CCTV Attendance Discrepancy Flagged',
+      latitude: 28.5921,
+      longitude: 77.0460,
+    );
+    _inspections.insert(0, sample);
+    addAuditLog(
+      user: 'Automated AI Engine',
+      role: 'System',
+      action: 'INSPECTION_TASK_ASSIGNED',
+      entity: '$nextId assigned to Inspector Rajesh V. for Akshaya Vidya Foundation',
+    );
+    notifyListeners();
+  }
+
   void addAuditLog({
     required String user,
     required String role,
@@ -1691,11 +1719,11 @@ class DrishtiService extends ChangeNotifier {
         projectId: 'PRJ-DEL-2025-01',
         projectName: 'PM-DAKSH Divyangjan Skill Center',
         assignedInspector: 'Inspector Rajesh V.',
-        status: 'Reviewed',
-        overallResult: 'Verified',
-        governmentReview: 'Verified',
-        assignedDate: '2026-09-10',
-        submittedDate: '2026-09-15',
+        status: 'Assigned',
+        overallResult: 'Pending Inspection',
+        governmentReview: 'Pending',
+        assignedDate: '2026-09-24',
+        submittedDate: null,
         reason: 'Unannounced AI Discrepancy Dispatch (Classroom Attendance Low)',
         latitude: 28.5921,
         longitude: 77.0460,

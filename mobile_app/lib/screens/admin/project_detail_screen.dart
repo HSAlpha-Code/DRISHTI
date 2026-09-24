@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../models/app_models.dart';
 import '../../services/drishti_service.dart';
+import '../../services/yolo_cctv_data.dart';
 import '../../widgets/common_ui.dart';
 import 'inspection_review_dialog.dart';
 
@@ -28,13 +29,14 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
 
   // AI & CCTV Live Simulation state
   Timer? _cctvTimer;
-  int _simulatedHeadcount = 15;
-  double _simulatedRiskScore = 62.8;
-  String _simulatedRiskLevel = 'Elevated';
+  int _simulatedHeadcount = 11;
+  double _simulatedRiskScore = 75.4;
+  String _simulatedRiskLevel = 'Critical';
   int _simulatedFrameSec = 0;
 
   // YOLOv11 backend script integration state
   bool _isYoloLoading = false;
+  int _yoloSampleIndex = 0;
   String? _yoloBase64Image;
   String? _yoloCliOutput;
   String? _yoloLastRunTime;
@@ -51,32 +53,26 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
       if (!mounted) return;
       setState(() {
         _simulatedFrameSec += 6;
-        // Subtle headcount oscillation around simulated_classroom_cctv.mp4
-        final delta = (timer.tick % 3 == 0) ? 1 : ((timer.tick % 2 == 0) ? -1 : 0);
-        _simulatedHeadcount = (_simulatedHeadcount + delta).clamp(9, 18);
-        final discrepancy = (35 - _simulatedHeadcount).abs();
-        _simulatedRiskScore = (discrepancy / 35.0 * 100.0 * 1.1).clamp(10.0, 95.0);
-        if (_simulatedRiskScore >= 65) {
-          _simulatedRiskLevel = 'Critical';
-        } else if (_simulatedRiskScore >= 35) {
-          _simulatedRiskLevel = 'Elevated';
-        } else {
-          _simulatedRiskLevel = 'Normal';
-        }
       });
     });
   }
 
   void _initYoloOutput() {
+    final sample = YoloCctvData.defaultSample;
     _yoloLastRunTime = DateTime.now().toString().split('.')[0];
-    _yoloCliOutput =
-        '\$ python resources/test.py --weights yolo11n.pt --conf 0.15 --imgsz 960\n'
-        '[YOLOv11 Engine] Initializing model \'yolo11n.pt\' (Ultralytics v8.3.240)\n'
-        '[OpenCV VideoCapture] Loaded \'simulated_classroom_cctv.mp4\' (30 FPS)\n'
-        '[Inference] Frame processed in 15.2ms (imgsz=960, classes=[0], conf=0.15)\n'
-        '[Detection Result] Total Headcount: 15 heads detected in active learning grid\n'
-        '[HUD Badge] Rendered \'Classroom Count: 15\' badge on frame overlay\n'
-        '[Timestamp] $_yoloLastRunTime • Status: VERIFIED BY MOSJE CCTV AI ENGINE';
+    _yoloBase64Image = sample.base64Image;
+    _simulatedHeadcount = sample.headcount;
+    _yoloCliOutput = sample.stdoutLog;
+
+    final discrepancy = (35 - _simulatedHeadcount).abs();
+    _simulatedRiskScore = (discrepancy / 35.0 * 100.0 * 1.1).clamp(10.0, 95.0);
+    if (_simulatedRiskScore >= 65) {
+      _simulatedRiskLevel = 'Critical';
+    } else if (_simulatedRiskScore >= 35) {
+      _simulatedRiskLevel = 'Elevated';
+    } else {
+      _simulatedRiskLevel = 'Normal';
+    }
   }
 
   Future<void> _refreshYoloInference() async {
@@ -87,7 +83,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
     try {
       final response = await http.get(
         Uri.parse('http://localhost:8000/api/ai/run-yolo/'),
-      ).timeout(const Duration(seconds: 8));
+      ).timeout(const Duration(seconds: 4));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -107,43 +103,35 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
             } else {
               _simulatedRiskLevel = 'Normal';
             }
+            _isYoloLoading = false;
           });
+          return;
         }
-      } else {
-        throw Exception('HTTP ${response.statusCode}');
       }
     } catch (_) {
-      // Graceful fallback to offline simulated YOLOv11 output
-      if (mounted) {
-        setState(() {
-          _simulatedHeadcount = 15;
-          _yoloLastRunTime = DateTime.now().toString().split('.')[0];
-          _yoloCliOutput =
-              '\$ python resources/test.py --weights yolo11n.pt --conf 0.15 --imgsz 960\n'
-              '[YOLOv11 Engine] Initializing model \'yolo11n.pt\' (Ultralytics v8.3.240)\n'
-              '[OpenCV VideoCapture] Loaded \'simulated_classroom_cctv.mp4\' (30 FPS)\n'
-              '[Inference] Frame processed in 16.4ms (imgsz=960, classes=[0], conf=0.15)\n'
-              '[Detection Result] Total Headcount: 15 heads detected in active learning grid\n'
-              '[HUD Badge] Rendered \'Classroom Count: 15\' badge on frame overlay\n'
-              '[Timestamp] $_yoloLastRunTime • Status: VERIFIED (OFFLINE BACKEND SIMULATION)';
+      // Backend offline or unreachable — fallback to rotating through real YOLO11 video detections
+    }
 
-          final discrepancy = (35 - _simulatedHeadcount).abs();
-          _simulatedRiskScore = (discrepancy / 35.0 * 100.0 * 1.1).clamp(10.0, 95.0);
-          if (_simulatedRiskScore >= 65) {
-            _simulatedRiskLevel = 'Critical';
-          } else if (_simulatedRiskScore >= 35) {
-            _simulatedRiskLevel = 'Elevated';
-          } else {
-            _simulatedRiskLevel = 'Normal';
-          }
-        });
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isYoloLoading = false;
-        });
-      }
+    if (mounted) {
+      _yoloSampleIndex = (_yoloSampleIndex + 1) % YoloCctvData.samples.length;
+      final sample = YoloCctvData.samples[_yoloSampleIndex];
+      setState(() {
+        _simulatedHeadcount = sample.headcount;
+        _yoloBase64Image = sample.base64Image;
+        _yoloCliOutput = sample.stdoutLog;
+        _yoloLastRunTime = DateTime.now().toString().split('.')[0];
+
+        final discrepancy = (35 - _simulatedHeadcount).abs();
+        _simulatedRiskScore = (discrepancy / 35.0 * 100.0 * 1.1).clamp(10.0, 95.0);
+        if (_simulatedRiskScore >= 65) {
+          _simulatedRiskLevel = 'Critical';
+        } else if (_simulatedRiskScore >= 35) {
+          _simulatedRiskLevel = 'Elevated';
+        } else {
+          _simulatedRiskLevel = 'Normal';
+        }
+        _isYoloLoading = false;
+      });
     }
   }
 
@@ -1005,24 +993,22 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
                       width: double.infinity,
                       height: 300,
                       fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Image.asset(
+                        'assets/cctv_yolo_annotated.jpg',
+                        width: double.infinity,
+                        height: 300,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   )
                 else
-                  Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.videocam, color: Colors.white30, size: 54),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Classroom Cam 101: simulated_classroom_cctv.mp4',
-                          style: TextStyle(color: Colors.white70, fontSize: 13),
-                        ),
-                        Text(
-                          'Sampling interval: ${_simulatedFrameSec}s elapsed',
-                          style: const TextStyle(color: Colors.white38, fontSize: 11),
-                        ),
-                      ],
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(11),
+                    child: Image.asset(
+                      'assets/cctv_yolo_annotated.jpg',
+                      width: double.infinity,
+                      height: 300,
+                      fit: BoxFit.cover,
                     ),
                   ),
 
@@ -1077,7 +1063,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      'Model: yolo11n.pt • Video: simulated_classroom_cctv.mp4 • ${_yoloLastRunTime ?? "Live"}',
+                      'Model: yolo11n.pt • Video: simulated_classroom_cctv.mp4 • ${_simulatedFrameSec}s • ${_yoloLastRunTime ?? "Live"}',
                       style: const TextStyle(color: Colors.white54, fontSize: 11, fontFamily: 'monospace'),
                     ),
                   ),
