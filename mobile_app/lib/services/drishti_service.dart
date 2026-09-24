@@ -657,10 +657,11 @@ class DrishtiService extends ChangeNotifier {
       ),
     ]);
 
-    // Fundings for PRJ-DEL-2025-01
+    // Fundings for all projects
     _fundings.addAll([
+      // PRJ-DEL-2025-01: PM-DAKSH Divyangjan Skill Center
       FundingModel(
-        id: 'FND-001',
+        id: 'FND-DEL01-01',
         projectId: 'PRJ-DEL-2025-01',
         source: 'MoSJE Central Scheme Grant',
         stage: 'Sanctioned',
@@ -670,21 +671,142 @@ class DrishtiService extends ChangeNotifier {
         reference: 'SAN-MOSJE-2025-081',
       ),
       FundingModel(
-        id: 'FND-002',
+        id: 'FND-DEL01-02',
         projectId: 'PRJ-DEL-2025-01',
         source: 'MoSJE First Tranche Release',
         stage: 'Released',
         amount: 3200000.0,
         date: '2025-04-20',
-        purpose: 'Q1-Q3 installment disbursement',
+        purpose: 'Q1-Q3 installment disbursement via PFMS DBT',
         reference: 'REL-PFMS-99210',
+      ),
+
+      // PRJ-DEL-2025-02: Senior Citizens Daycare & Medical Wing
+      FundingModel(
+        id: 'FND-DEL02-01',
+        projectId: 'PRJ-DEL-2025-02',
+        source: 'MoSJE Geriatric Welfare Grant',
+        stage: 'Sanctioned',
+        amount: 2800000.0,
+        date: '2025-06-18',
+        purpose: 'Elderly daycare medical clinic & cognitive recreation setup',
+        reference: 'SAN-MOSJE-2025-114',
+      ),
+      FundingModel(
+        id: 'FND-DEL02-02',
+        projectId: 'PRJ-DEL-2025-02',
+        source: 'MoSJE Senior Welfare Allocation',
+        stage: 'Released',
+        amount: 1900000.0,
+        date: '2025-07-02',
+        purpose: 'Tranche I clinical beds and mobility aids release',
+        reference: 'REL-PFMS-99402',
+      ),
+
+      // PRJ-MUM-2025-01: De-addiction & Psychosocial Rehab Center
+      FundingModel(
+        id: 'FND-MUM01-01',
+        projectId: 'PRJ-MUM-2025-01',
+        source: 'NAPDDR Substance Prevention Grant',
+        stage: 'Sanctioned',
+        amount: 5200000.0,
+        date: '2025-01-15',
+        purpose: 'Annual operational grant for 50-bed de-addiction rehab center',
+        reference: 'SAN-NAPDDR-2025-032',
+      ),
+      FundingModel(
+        id: 'FND-MUM01-02',
+        projectId: 'PRJ-MUM-2025-01',
+        source: 'PFMS Central Disbursal (Tranche I)',
+        stage: 'Released',
+        amount: 2600000.0,
+        date: '2025-02-01',
+        purpose: 'Inpatient detoxification ward setup and counselor stipends',
+        reference: 'REL-PFMS-88194',
+      ),
+      FundingModel(
+        id: 'FND-MUM01-03',
+        projectId: 'PRJ-MUM-2025-01',
+        source: 'PFMS Central Disbursal (Tranche II)',
+        stage: 'Released',
+        amount: 1500000.0,
+        date: '2025-06-10',
+        purpose: 'Mid-term milestone release after biometric audit clearance',
+        reference: 'REL-PFMS-91044',
+      ),
+
+      // PRJ-BLR-2024-01: Rural SC/ST Artisan Livelihood Program
+      FundingModel(
+        id: 'FND-BLR01-01',
+        projectId: 'PRJ-BLR-2024-01',
+        source: 'SC/ST Economic Development Fund',
+        stage: 'Sanctioned',
+        amount: 3600000.0,
+        date: '2024-07-05',
+        purpose: 'Artisan handloom weaving and direct market enablement',
+        reference: 'SAN-SCST-2024-099',
+      ),
+      FundingModel(
+        id: 'FND-BLR01-02',
+        projectId: 'PRJ-BLR-2024-01',
+        source: 'Full Grant Disbursal (Final)',
+        stage: 'Released',
+        amount: 3600000.0,
+        date: '2024-08-01',
+        purpose: '100% completion funding upon successful co-op registration',
+        reference: 'REL-PFMS-77102',
+      ),
+
+      // PRJ-LKO-2025-01: Destitute Women Micro-Enterprise Hub
+      FundingModel(
+        id: 'FND-LKO01-01',
+        projectId: 'PRJ-LKO-2025-01',
+        source: 'MoSJE Women Livelihoods Scheme',
+        stage: 'Sanctioned',
+        amount: 3100000.0,
+        date: '2025-05-10',
+        purpose: 'Skill certification in apparel stitching and food packaging',
+        reference: 'SAN-MOSJE-2025-201',
+      ),
+      FundingModel(
+        id: 'FND-LKO01-02',
+        projectId: 'PRJ-LKO-2025-01',
+        source: 'First Milestone Disbursement',
+        stage: 'Released',
+        amount: 2200000.0,
+        date: '2025-06-01',
+        purpose: 'Industrial sewing units and hygienic kitchen setup',
+        reference: 'REL-PFMS-94182',
+      ),
+
+      // PRJ-JAI-2025-01: Vision Restorative Eyecare Mission
+      FundingModel(
+        id: 'FND-JAI01-01',
+        projectId: 'PRJ-JAI-2025-01',
+        source: 'National Blindness & Vision Care Grant',
+        stage: 'Sanctioned',
+        amount: 4000000.0,
+        date: '2025-03-05',
+        purpose: 'Mobile cataract surgeries and assistive spectacles outreach',
+        reference: 'SAN-AROGYA-2025-045',
+      ),
+      FundingModel(
+        id: 'FND-JAI01-02',
+        projectId: 'PRJ-JAI-2025-01',
+        source: 'Mobile Healthcare Grant Tranche',
+        stage: 'Released',
+        amount: 3000000.0,
+        date: '2025-04-12',
+        purpose: 'Surgical consumables and outreach camp van maintenance',
+        reference: 'REL-PFMS-93108',
       ),
     ]);
 
-    // Expenses for PRJ-DEL-2025-01
+    // Expenses for all projects
     _expenses.addAll([
+      // PRJ-DEL-2025-01
       ExpenseModel(
-        txnId: 'TXN-DEL-8801',
+        txnId: 'TXN-DEL01-8801',
         projectId: 'PRJ-DEL-2025-01',
         purpose: 'Procurement of 25 Braille Displays & Screen Readers',
         amount: 625000.0,
@@ -693,7 +815,7 @@ class DrishtiService extends ChangeNotifier {
         status: 'Verified',
       ),
       ExpenseModel(
-        txnId: 'TXN-DEL-8802',
+        txnId: 'TXN-DEL01-8802',
         projectId: 'PRJ-DEL-2025-01',
         purpose: 'Trainer Honorarium & Pedagogical Materials',
         amount: 420000.0,
@@ -702,7 +824,7 @@ class DrishtiService extends ChangeNotifier {
         status: 'Verified',
       ),
       ExpenseModel(
-        txnId: 'TXN-DEL-8803',
+        txnId: 'TXN-DEL01-8803',
         projectId: 'PRJ-DEL-2025-01',
         purpose: 'Nutritional Stipend Disbursement for Trainees',
         amount: 315000.0,
@@ -711,7 +833,7 @@ class DrishtiService extends ChangeNotifier {
         status: 'Verified',
       ),
       ExpenseModel(
-        txnId: 'TXN-DEL-8804',
+        txnId: 'TXN-DEL01-8804',
         projectId: 'PRJ-DEL-2025-01',
         purpose: 'CCTV Infrastructure Upgrades & Optical Broadband',
         amount: 180000.0,
@@ -719,12 +841,203 @@ class DrishtiService extends ChangeNotifier {
         date: '2025-08-14',
         status: 'Pending',
       ),
+
+      // PRJ-DEL-2025-02
+      ExpenseModel(
+        txnId: 'TXN-DEL02-7701',
+        projectId: 'PRJ-DEL-2025-02',
+        purpose: 'Hydraulic Physiotherapy Beds & Traction Units',
+        amount: 380000.0,
+        vendor: 'MediCare Rehab Equipment',
+        date: '2025-07-15',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-DEL02-7702',
+        projectId: 'PRJ-DEL-2025-02',
+        purpose: 'Diagnostic Blood Chemistry & ECG Analyzers',
+        amount: 240000.0,
+        vendor: 'BioHealth Diagnostic Instruments',
+        date: '2025-08-01',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-DEL02-7703',
+        projectId: 'PRJ-DEL-2025-02',
+        purpose: 'Elderly Nutritious Mid-day Meal Program (Q1)',
+        amount: 420000.0,
+        vendor: 'Annapurna Institutional Catering',
+        date: '2025-08-25',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-DEL02-7704',
+        projectId: 'PRJ-DEL-2025-02',
+        purpose: 'Visiting Geriatrician & Nurse Honorarium',
+        amount: 410000.0,
+        vendor: 'Healthcare Professionals Council',
+        date: '2025-09-10',
+        status: 'Verified',
+      ),
+
+      // PRJ-MUM-2025-01
+      ExpenseModel(
+        txnId: 'TXN-MUM01-6601',
+        projectId: 'PRJ-MUM-2025-01',
+        purpose: 'Essential Detoxification Pharmaceuticals & Emergency Meds',
+        amount: 980000.0,
+        vendor: 'Sahyadri Pharma Distributors',
+        date: '2025-02-18',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-MUM01-6602',
+        projectId: 'PRJ-MUM-2025-01',
+        purpose: 'Clinical Psychologist & Addiction Counselors Retainer',
+        amount: 1120000.0,
+        vendor: 'MindCare Clinical Services',
+        date: '2025-04-10',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-MUM01-6603',
+        projectId: 'PRJ-MUM-2025-01',
+        purpose: 'Vocational Pottery & Woodwork Therapeutic Tools',
+        amount: 840000.0,
+        vendor: 'Artisan Crafts Workshop Mumbai',
+        date: '2025-05-22',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-MUM01-6604',
+        projectId: 'PRJ-MUM-2025-01',
+        purpose: 'Pharmacy Stock Register Software & Barcode Scanners',
+        amount: 180000.0,
+        vendor: 'MedTech Softwares India',
+        date: '2025-07-14',
+        status: 'Pending',
+      ),
+
+      // PRJ-BLR-2024-01
+      ExpenseModel(
+        txnId: 'TXN-BLR01-5501',
+        projectId: 'PRJ-BLR-2024-01',
+        purpose: 'Handloom Frame Weaving Units & Fly Shuttle Sets',
+        amount: 1450000.0,
+        vendor: 'Karnataka Loom Machinery Works',
+        date: '2024-08-15',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-BLR01-5502',
+        projectId: 'PRJ-BLR-2024-01',
+        purpose: 'Natural Mulberry Silk & Cotton Spun Yarn Bales',
+        amount: 1020000.0,
+        vendor: 'Mysore Silk Weavers Federation',
+        date: '2024-10-04',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-BLR01-5503',
+        projectId: 'PRJ-BLR-2024-01',
+        purpose: 'Master Artisan Skill Instructor Honorarium',
+        amount: 650000.0,
+        vendor: 'South India Crafts Guild',
+        date: '2024-12-20',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-BLR01-5504',
+        projectId: 'PRJ-BLR-2024-01',
+        purpose: 'State Exhibition Stall Booking & Market Linkage',
+        amount: 460000.0,
+        vendor: 'Tribal Co-op Marketing Board',
+        date: '2025-03-15',
+        status: 'Verified',
+      ),
+
+      // PRJ-LKO-2025-01
+      ExpenseModel(
+        txnId: 'TXN-LKO01-4401',
+        projectId: 'PRJ-LKO-2025-01',
+        purpose: '20 Heavy-Duty Industrial Overlock Sewing Machines',
+        amount: 680000.0,
+        vendor: 'Usha & Brother Stitching Systems',
+        date: '2025-06-12',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-LKO01-4402',
+        projectId: 'PRJ-LKO-2025-01',
+        purpose: 'Commercial Spices Pulverizer & Sealed Packaging Unit',
+        amount: 450000.0,
+        vendor: 'AgroProcessing Machines Kanpur',
+        date: '2025-07-08',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-LKO01-4403',
+        projectId: 'PRJ-LKO-2025-01',
+        purpose: 'Textile Fabric Bolts & Food Grade Raw Materials',
+        amount: 340000.0,
+        vendor: 'Avadh Wholesale Cooperative',
+        date: '2025-08-16',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-LKO01-4404',
+        projectId: 'PRJ-LKO-2025-01',
+        purpose: 'Food Safety Hygiene Audit & FSSAI Lab Testing',
+        amount: 250000.0,
+        vendor: 'Central Standards Certification Lab',
+        date: '2025-09-02',
+        status: 'Verified',
+      ),
+
+      // PRJ-JAI-2025-01
+      ExpenseModel(
+        txnId: 'TXN-JAI01-3301',
+        projectId: 'PRJ-JAI-2025-01',
+        purpose: 'Hydrophobic Foldable Intraocular Lenses (400 Units)',
+        amount: 1150000.0,
+        vendor: 'Appasamy Ocular Technologies',
+        date: '2025-04-20',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-JAI01-3302',
+        projectId: 'PRJ-JAI-2025-01',
+        purpose: 'Mobile Clinic Ophthalmic Slit Lamp Calibration',
+        amount: 380000.0,
+        vendor: 'Carl Zeiss India Meditec',
+        date: '2025-05-18',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-JAI01-3303',
+        projectId: 'PRJ-JAI-2025-01',
+        purpose: 'Outreach Screening Camp Bus Fuel & Mobility Logistics',
+        amount: 560000.0,
+        vendor: 'Rajasthan Rural Transport Corp',
+        date: '2025-06-30',
+        status: 'Verified',
+      ),
+      ExpenseModel(
+        txnId: 'TXN-JAI01-3304',
+        projectId: 'PRJ-JAI-2025-01',
+        purpose: 'Sterilized Surgical Drapes & Antibiotic Eye Drops',
+        amount: 420000.0,
+        vendor: 'Sun Life Surgicals Jaipur',
+        date: '2025-08-04',
+        status: 'Verified',
+      ),
     ]);
 
-    // Beneficiaries
+    // Beneficiaries for all projects
     _beneficiaries.addAll([
+      // PRJ-DEL-2025-01
       BeneficiaryModel(
-        id: 'BEN-001',
+        id: 'BEN-DEL01-01',
         projectId: 'PRJ-DEL-2025-01',
         name: 'Aarav Sharma',
         age: 22,
@@ -733,7 +1046,7 @@ class DrishtiService extends ChangeNotifier {
         date: '2025-07-10',
       ),
       BeneficiaryModel(
-        id: 'BEN-002',
+        id: 'BEN-DEL01-02',
         projectId: 'PRJ-DEL-2025-01',
         name: 'Pooja Kumari',
         age: 24,
@@ -742,7 +1055,7 @@ class DrishtiService extends ChangeNotifier {
         date: '2025-07-15',
       ),
       BeneficiaryModel(
-        id: 'BEN-003',
+        id: 'BEN-DEL01-03',
         projectId: 'PRJ-DEL-2025-01',
         name: 'Mohammed Farooq',
         age: 21,
@@ -751,7 +1064,7 @@ class DrishtiService extends ChangeNotifier {
         date: '2025-08-02',
       ),
       BeneficiaryModel(
-        id: 'BEN-004',
+        id: 'BEN-DEL01-04',
         projectId: 'PRJ-DEL-2025-01',
         name: 'Sunita Verma',
         age: 27,
@@ -760,7 +1073,7 @@ class DrishtiService extends ChangeNotifier {
         date: '2025-08-20',
       ),
       BeneficiaryModel(
-        id: 'BEN-005',
+        id: 'BEN-DEL01-05',
         projectId: 'PRJ-DEL-2025-01',
         name: 'Rohan Patel',
         age: 19,
@@ -768,12 +1081,248 @@ class DrishtiService extends ChangeNotifier {
         serviceReceived: 'Call Center Operations Skill Badge',
         date: '2025-09-05',
       ),
+
+      // PRJ-DEL-2025-02
+      BeneficiaryModel(
+        id: 'BEN-DEL02-01',
+        projectId: 'PRJ-DEL-2025-02',
+        name: 'Kewal Krishan',
+        age: 72,
+        gender: 'Male',
+        serviceReceived: 'Knee Osteoarthritis Physiotherapy & Daily Lunch',
+        date: '2025-07-12',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-DEL02-02',
+        projectId: 'PRJ-DEL-2025-02',
+        name: 'Shanti Devi',
+        age: 68,
+        gender: 'Female',
+        serviceReceived: 'Hypertension Management & Yoga Meditation',
+        date: '2025-07-20',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-DEL02-03',
+        projectId: 'PRJ-DEL-2025-02',
+        name: 'Harish Chandra',
+        age: 76,
+        gender: 'Male',
+        serviceReceived: 'Cognitive Memory Therapy & Assisted Walking Frame',
+        date: '2025-08-05',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-DEL02-04',
+        projectId: 'PRJ-DEL-2025-02',
+        name: 'Kamla Rawat',
+        age: 70,
+        gender: 'Female',
+        serviceReceived: 'Routine Ophthalmology Checkup & Reading Aids',
+        date: '2025-08-18',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-DEL02-05',
+        projectId: 'PRJ-DEL-2025-02',
+        name: 'Bhagwan Das',
+        age: 74,
+        gender: 'Male',
+        serviceReceived: 'Diabetes Nutritional Care & Social Respite',
+        date: '2025-09-01',
+      ),
+
+      // PRJ-MUM-2025-01
+      BeneficiaryModel(
+        id: 'BEN-MUM01-01',
+        projectId: 'PRJ-MUM-2025-01',
+        name: 'Prateek Jadhav',
+        age: 29,
+        gender: 'Male',
+        serviceReceived: 'Phase 2 Inpatient Detoxification & Counseling',
+        date: '2025-03-01',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-MUM01-02',
+        projectId: 'PRJ-MUM-2025-01',
+        name: 'Sameer Naik',
+        age: 33,
+        gender: 'Male',
+        serviceReceived: 'Cognitive Behavioral Therapy (12 Sessions)',
+        date: '2025-04-15',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-MUM01-03',
+        projectId: 'PRJ-MUM-2025-01',
+        name: 'Anand Gawde',
+        age: 26,
+        gender: 'Male',
+        serviceReceived: 'Vocational Carpentry Apprenticeship Placement',
+        date: '2025-05-10',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-MUM01-04',
+        projectId: 'PRJ-MUM-2025-01',
+        name: 'Rahul Sawant',
+        age: 31,
+        gender: 'Male',
+        serviceReceived: 'Family Reconciliation Therapy & Relapse Prevention',
+        date: '2025-06-25',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-MUM01-05',
+        projectId: 'PRJ-MUM-2025-01',
+        name: 'Vinod Tambe',
+        age: 35,
+        gender: 'Male',
+        serviceReceived: 'Outpatient Follow-up & Sobriety Peer Support',
+        date: '2025-08-04',
+      ),
+
+      // PRJ-BLR-2024-01
+      BeneficiaryModel(
+        id: 'BEN-BLR01-01',
+        projectId: 'PRJ-BLR-2024-01',
+        name: 'Lakshmamma M.',
+        age: 38,
+        gender: 'Female',
+        serviceReceived: 'Silk Jacquard Handloom Weaving Certificate',
+        date: '2024-09-10',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-BLR01-02',
+        projectId: 'PRJ-BLR-2024-01',
+        name: 'Narasimha Murthy',
+        age: 42,
+        gender: 'Male',
+        serviceReceived: 'Organic Dye Formulation & Quality Grader Badge',
+        date: '2024-10-02',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-BLR01-03',
+        projectId: 'PRJ-BLR-2024-01',
+        name: 'Kenchappa R.',
+        age: 45,
+        gender: 'Male',
+        serviceReceived: 'Cooperative Society Shareholder Enrollment',
+        date: '2024-11-15',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-BLR01-04',
+        projectId: 'PRJ-BLR-2024-01',
+        name: 'Rathnamma K.',
+        age: 34,
+        gender: 'Female',
+        serviceReceived: 'E-Commerce Marketplace Listing Training',
+        date: '2025-01-20',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-BLR01-05',
+        projectId: 'PRJ-BLR-2024-01',
+        name: 'Manjunath S.',
+        age: 28,
+        gender: 'Male',
+        serviceReceived: 'Micro-Credit Bank Account & Mudra Loan Sanction',
+        date: '2025-03-12',
+      ),
+
+      // PRJ-LKO-2025-01
+      BeneficiaryModel(
+        id: 'BEN-LKO01-01',
+        projectId: 'PRJ-LKO-2025-01',
+        name: 'Kusum Lata',
+        age: 36,
+        gender: 'Female',
+        serviceReceived: 'Commercial Apparel Pattern Cutting Course',
+        date: '2025-06-14',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-LKO01-02',
+        projectId: 'PRJ-LKO-2025-01',
+        name: 'Raziya Bano',
+        age: 32,
+        gender: 'Female',
+        serviceReceived: 'Chikan Hand Embroidery Master Artisan Badge',
+        date: '2025-06-28',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-LKO01-03',
+        projectId: 'PRJ-LKO-2025-01',
+        name: 'Geeta Devi',
+        age: 40,
+        gender: 'Female',
+        serviceReceived: 'Pickle & Fruit Preservation FSSAI Certificate',
+        date: '2025-07-15',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-LKO01-04',
+        projectId: 'PRJ-LKO-2025-01',
+        name: 'Meena Prajapati',
+        age: 29,
+        gender: 'Female',
+        serviceReceived: 'Self-Help Group Bookkeeping & Banking Unit',
+        date: '2025-08-01',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-LKO01-05',
+        projectId: 'PRJ-LKO-2025-01',
+        name: 'Shabana Khatoon',
+        age: 35,
+        gender: 'Female',
+        serviceReceived: 'Micro-Enterprise Sewing Machine Grant Receipt',
+        date: '2025-08-22',
+      ),
+
+      // PRJ-JAI-2025-01
+      BeneficiaryModel(
+        id: 'BEN-JAI01-01',
+        projectId: 'PRJ-JAI-2025-01',
+        name: 'Ram Lal Meena',
+        age: 67,
+        gender: 'Male',
+        serviceReceived: 'Right Eye Micro-Incision Cataract Surgery (MICS)',
+        date: '2025-04-18',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-JAI01-02',
+        projectId: 'PRJ-JAI-2025-01',
+        name: 'Prem Kanwar',
+        age: 71,
+        gender: 'Female',
+        serviceReceived: 'Bilateral Cataract Implantation & Post-op Kit',
+        date: '2025-05-02',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-JAI01-03',
+        projectId: 'PRJ-JAI-2025-01',
+        name: 'Mohan Lal Gurjar',
+        age: 63,
+        gender: 'Male',
+        serviceReceived: 'Diabetic Retinopathy Screening & High-Index Glasses',
+        date: '2025-06-12',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-JAI01-04',
+        projectId: 'PRJ-JAI-2025-01',
+        name: 'Kesar Devi',
+        age: 69,
+        gender: 'Female',
+        serviceReceived: 'Free Spectacles Prescription & Glaucoma Drops',
+        date: '2025-07-05',
+      ),
+      BeneficiaryModel(
+        id: 'BEN-JAI01-05',
+        projectId: 'PRJ-JAI-2025-01',
+        name: 'Chhitar Mal',
+        age: 75,
+        gender: 'Male',
+        serviceReceived: 'Left Eye Foldable IOL Surgery & Followup Exam',
+        date: '2025-08-14',
+      ),
     ]);
 
-    // Documents
+    // Documents for all projects
     _documents.addAll([
+      // PRJ-DEL-2025-01
       DocumentModel(
-        id: 'DOC-001',
+        id: 'DOC-DEL01-01',
         projectId: 'PRJ-DEL-2025-01',
         title: 'Form GFR 12-A Utilization Certificate (H1)',
         docType: 'Utilization Certificate',
@@ -783,7 +1332,7 @@ class DrishtiService extends ChangeNotifier {
         sha256Hash: computeSha256('SAMPLE_UTILIZATION_CERT_PRJ_DEL_01'),
       ),
       DocumentModel(
-        id: 'DOC-002',
+        id: 'DOC-DEL01-02',
         projectId: 'PRJ-DEL-2025-01',
         title: 'Tax Invoice - AssistTech Braille Units #8801',
         docType: 'Vendor Invoice',
@@ -792,22 +1341,133 @@ class DrishtiService extends ChangeNotifier {
         uploadedAt: '2025-05-18',
         sha256Hash: computeSha256('SAMPLE_INVOICE_ASSIST_TECH_8801'),
       ),
+
+      // PRJ-DEL-2025-02
+      DocumentModel(
+        id: 'DOC-DEL02-01',
+        projectId: 'PRJ-DEL-2025-02',
+        title: 'MoSJE Scheme Sanction Order #114-GER',
+        docType: 'Sanction Order',
+        fileUrl: '/media/documents/sanction_del02_114.pdf',
+        fileSize: '2.1 MB',
+        uploadedAt: '2025-06-20',
+        sha256Hash: computeSha256('SANCTION_ORDER_PRJ_DEL_02'),
+      ),
+      DocumentModel(
+        id: 'DOC-DEL02-02',
+        projectId: 'PRJ-DEL-2025-02',
+        title: 'Medical Devices Drug & Cosmetology Compliance Certificate',
+        docType: 'Regulatory Compliance',
+        fileUrl: '/media/documents/compliance_med_del02.pdf',
+        fileSize: '1.2 MB',
+        uploadedAt: '2025-07-05',
+        sha256Hash: computeSha256('COMPLIANCE_MED_DEL_02'),
+      ),
+
+      // PRJ-MUM-2025-01
+      DocumentModel(
+        id: 'DOC-MUM01-01',
+        projectId: 'PRJ-MUM-2025-01',
+        title: 'NAPDDR Quarterly Utilization Certificate (Q2)',
+        docType: 'Utilization Certificate',
+        fileUrl: '/media/documents/uc_napddr_mum01.pdf',
+        fileSize: '2.4 MB',
+        uploadedAt: '2025-06-30',
+        sha256Hash: computeSha256('UC_NAPDDR_MUM_01'),
+      ),
+      DocumentModel(
+        id: 'DOC-MUM01-02',
+        projectId: 'PRJ-MUM-2025-01',
+        title: 'Scheduled Drugs Pharmacy Batch Ledger Audit',
+        docType: 'Audit Report',
+        fileUrl: '/media/documents/audit_pharma_mum01.pdf',
+        fileSize: '1.5 MB',
+        uploadedAt: '2025-07-20',
+        sha256Hash: computeSha256('AUDIT_PHARMA_MUM_01'),
+      ),
+
+      // PRJ-BLR-2024-01
+      DocumentModel(
+        id: 'DOC-BLR01-01',
+        projectId: 'PRJ-BLR-2024-01',
+        title: 'Final Completion Audit & Form GFR 12-C',
+        docType: 'Utilization Certificate',
+        fileUrl: '/media/documents/final_uc_blr01.pdf',
+        fileSize: '3.1 MB',
+        uploadedAt: '2025-07-02',
+        sha256Hash: computeSha256('FINAL_COMPLETION_UC_BLR_01'),
+      ),
+      DocumentModel(
+        id: 'DOC-BLR01-02',
+        projectId: 'PRJ-BLR-2024-01',
+        title: 'Artisan Cooperative Registration Certificate #KA-BLR-882',
+        docType: 'Registration Certificate',
+        fileUrl: '/media/documents/coop_cert_blr01.pdf',
+        fileSize: '950 KB',
+        uploadedAt: '2024-11-20',
+        sha256Hash: computeSha256('COOP_REG_CERT_BLR_01'),
+      ),
+
+      // PRJ-LKO-2025-01
+      DocumentModel(
+        id: 'DOC-LKO01-01',
+        projectId: 'PRJ-LKO-2025-01',
+        title: 'FSSAI Food Safety Hygiene Compliance Certificate',
+        docType: 'Regulatory Compliance',
+        fileUrl: '/media/documents/fssai_cert_lko01.pdf',
+        fileSize: '1.1 MB',
+        uploadedAt: '2025-07-10',
+        sha256Hash: computeSha256('FSSAI_COMPLIANCE_LKO_01'),
+      ),
+      DocumentModel(
+        id: 'DOC-LKO01-02',
+        projectId: 'PRJ-LKO-2025-01',
+        title: 'Machinery Procurement E-Tender Evaluation Report',
+        docType: 'Procurement Audit',
+        fileUrl: '/media/documents/etender_report_lko01.pdf',
+        fileSize: '1.7 MB',
+        uploadedAt: '2025-06-18',
+        sha256Hash: computeSha256('ETENDER_REPORT_LKO_01'),
+      ),
+
+      // PRJ-JAI-2025-01
+      DocumentModel(
+        id: 'DOC-JAI01-01',
+        projectId: 'PRJ-JAI-2025-01',
+        title: 'Cataract Surgery Log & District CMO Clearance Certificate',
+        docType: 'Clinical Clearance',
+        fileUrl: '/media/documents/cmo_clearance_jai01.pdf',
+        fileSize: '2.8 MB',
+        uploadedAt: '2025-06-15',
+        sha256Hash: computeSha256('CMO_CLEARANCE_JAI_01'),
+      ),
+      DocumentModel(
+        id: 'DOC-JAI01-02',
+        projectId: 'PRJ-JAI-2025-01',
+        title: 'Beneficiary Post-Op Visual Acuity Assessment Ledger',
+        docType: 'Medical Records',
+        fileUrl: '/media/documents/postop_acuity_jai01.pdf',
+        fileSize: '1.9 MB',
+        uploadedAt: '2025-08-10',
+        sha256Hash: computeSha256('POSTOP_ACUITY_JAI_01'),
+      ),
     ]);
 
-    // Cameras
+    // Cameras for all projects (YOLOv11 streams)
     _cameras.addAll([
+      // PRJ-DEL-2025-01
       CameraModel(
-        id: 'CAM-001',
+        id: 'CAM-DEL01-01',
         projectId: 'PRJ-DEL-2025-01',
         name: 'Classroom 101 - Main Training Lab',
         streamUrl: 'resources/simulated_classroom_cctv.mp4',
         status: 'Online',
-        lastHeadcount: 12,
+        lastHeadcount: 15,
         expectedHeadcount: 35,
         riskScore: 78.5,
       ),
       CameraModel(
-        id: 'CAM-002',
+        id: 'CAM-DEL01-02',
         projectId: 'PRJ-DEL-2025-01',
         name: 'Entrance Foyer & Attendance Kiosk',
         streamUrl: 'resources/entrance_kiosk_cctv.mp4',
@@ -816,21 +1476,132 @@ class DrishtiService extends ChangeNotifier {
         expectedHeadcount: 10,
         riskScore: 14.0,
       ),
+
+      // PRJ-DEL-2025-02
+      CameraModel(
+        id: 'CAM-DEL02-01',
+        projectId: 'PRJ-DEL-2025-02',
+        name: 'Senior Activity Hall & Daycare Lounge',
+        streamUrl: 'resources/simulated_classroom_cctv.mp4',
+        status: 'Online',
+        lastHeadcount: 22,
+        expectedHeadcount: 25,
+        riskScore: 12.0,
+      ),
+      CameraModel(
+        id: 'CAM-DEL02-02',
+        projectId: 'PRJ-DEL-2025-02',
+        name: 'Physiotherapy Ward & Ramp Gate',
+        streamUrl: 'resources/entrance_kiosk_cctv.mp4',
+        status: 'Online',
+        lastHeadcount: 14,
+        expectedHeadcount: 15,
+        riskScore: 8.5,
+      ),
+
+      // PRJ-MUM-2025-01
+      CameraModel(
+        id: 'CAM-MUM01-01',
+        projectId: 'PRJ-MUM-2025-01',
+        name: 'Detox Ward Dayroom & Group Therapy Hall',
+        streamUrl: 'resources/simulated_classroom_cctv.mp4',
+        status: 'Online',
+        lastHeadcount: 28,
+        expectedHeadcount: 40,
+        riskScore: 68.0,
+      ),
+      CameraModel(
+        id: 'CAM-MUM01-02',
+        projectId: 'PRJ-MUM-2025-01',
+        name: 'Dispensary Entry & Biometric Kiosk',
+        streamUrl: 'resources/entrance_kiosk_cctv.mp4',
+        status: 'Online',
+        lastHeadcount: 5,
+        expectedHeadcount: 6,
+        riskScore: 10.0,
+      ),
+
+      // PRJ-BLR-2024-01
+      CameraModel(
+        id: 'CAM-BLR01-01',
+        projectId: 'PRJ-BLR-2024-01',
+        name: 'Central Handloom Weaving Shed',
+        streamUrl: 'resources/simulated_classroom_cctv.mp4',
+        status: 'Online',
+        lastHeadcount: 30,
+        expectedHeadcount: 30,
+        riskScore: 0.0,
+      ),
+      CameraModel(
+        id: 'CAM-BLR01-02',
+        projectId: 'PRJ-BLR-2024-01',
+        name: 'Yarn Storage & Packing Hall',
+        streamUrl: 'resources/entrance_kiosk_cctv.mp4',
+        status: 'Online',
+        lastHeadcount: 12,
+        expectedHeadcount: 12,
+        riskScore: 0.0,
+      ),
+
+      // PRJ-LKO-2025-01
+      CameraModel(
+        id: 'CAM-LKO01-01',
+        projectId: 'PRJ-LKO-2025-01',
+        name: 'Industrial Sewing Workshop Room A',
+        streamUrl: 'resources/simulated_classroom_cctv.mp4',
+        status: 'Online',
+        lastHeadcount: 18,
+        expectedHeadcount: 25,
+        riskScore: 36.0,
+      ),
+      CameraModel(
+        id: 'CAM-LKO01-02',
+        projectId: 'PRJ-LKO-2025-01',
+        name: 'Food Processing & Packaging Kitchen',
+        streamUrl: 'resources/entrance_kiosk_cctv.mp4',
+        status: 'Online',
+        lastHeadcount: 10,
+        expectedHeadcount: 12,
+        riskScore: 15.0,
+      ),
+
+      // PRJ-JAI-2025-01
+      CameraModel(
+        id: 'CAM-JAI01-01',
+        projectId: 'PRJ-JAI-2025-01',
+        name: 'Ophthalmic Screening Hall',
+        streamUrl: 'resources/simulated_classroom_cctv.mp4',
+        status: 'Online',
+        lastHeadcount: 32,
+        expectedHeadcount: 35,
+        riskScore: 16.0,
+      ),
+      CameraModel(
+        id: 'CAM-JAI01-02',
+        projectId: 'PRJ-JAI-2025-01',
+        name: 'Pre-op Ward & Spectacle Dispensary',
+        streamUrl: 'resources/entrance_kiosk_cctv.mp4',
+        status: 'Online',
+        lastHeadcount: 15,
+        expectedHeadcount: 18,
+        riskScore: 18.0,
+      ),
     ]);
 
-    // Alerts
+    // Alerts for all projects
     _alerts.addAll([
+      // PRJ-DEL-2025-01
       AlertModel(
-        id: 'ALT-001',
+        id: 'ALT-DEL01-01',
         projectId: 'PRJ-DEL-2025-01',
         projectName: 'PM-DAKSH Divyangjan Skill Center',
         severity: 'Critical',
-        reason: 'Automated CCTV Headcount Alert: Detected 12 vs 35 expected capacity (Risk: 78.5%)',
+        reason: 'Automated CCTV Headcount Alert: Detected 15 vs 35 expected capacity (Risk: 78.5%)',
         status: 'Open',
         createdAt: '2026-09-22 10:14:00',
       ),
       AlertModel(
-        id: 'ALT-002',
+        id: 'ALT-DEL01-02',
         projectId: 'PRJ-DEL-2025-01',
         projectName: 'PM-DAKSH Divyangjan Skill Center',
         severity: 'Elevated',
@@ -838,20 +1609,79 @@ class DrishtiService extends ChangeNotifier {
         status: 'Open',
         createdAt: '2026-09-20 16:45:00',
       ),
+
+      // PRJ-DEL-2025-02
       AlertModel(
-        id: 'ALT-003',
+        id: 'ALT-DEL02-01',
+        projectId: 'PRJ-DEL-2025-02',
+        projectName: 'Senior Citizens Daycare & Medical Wing',
+        severity: 'Normal',
+        reason: 'Routine quarterly medical equipment calibration due within 14 days',
+        status: 'Open',
+        createdAt: '2026-09-21 09:30:00',
+      ),
+
+      // PRJ-MUM-2025-01
+      AlertModel(
+        id: 'ALT-MUM01-01',
         projectId: 'PRJ-MUM-2025-01',
         projectName: 'De-addiction & Psychosocial Rehab Center',
-        severity: 'Elevated',
-        reason: 'Pharmacy batch register discrepancy flagged during internal quarterly reconciliation',
+        severity: 'Critical',
+        reason: 'CCTV Discrepancy & Pharmacy Ledger mismatch: Missing narcotic register entry',
         status: 'Open',
         createdAt: '2026-09-18 14:10:00',
       ),
+      AlertModel(
+        id: 'ALT-MUM01-02',
+        projectId: 'PRJ-MUM-2025-01',
+        projectName: 'De-addiction & Psychosocial Rehab Center',
+        severity: 'Elevated',
+        reason: 'Automated CCTV Headcount Alert: Detected 28 vs 40 expected bed occupancy (Risk: 68.0%)',
+        status: 'Open',
+        createdAt: '2026-09-19 11:05:00',
+      ),
+
+      // PRJ-BLR-2024-01
+      AlertModel(
+        id: 'ALT-BLR01-01',
+        projectId: 'PRJ-BLR-2024-01',
+        projectName: 'Rural SC/ST Artisan Livelihood Program',
+        severity: 'Normal',
+        reason: 'Final audit clearance pending ministerial sign-off (Project completed 100%)',
+        status: 'Open',
+        createdAt: '2026-09-15 15:20:00',
+      ),
+
+      // PRJ-LKO-2025-01
+      AlertModel(
+        id: 'ALT-LKO01-01',
+        projectId: 'PRJ-LKO-2025-01',
+        projectName: 'Destitute Women Micro-Enterprise Hub',
+        severity: 'Elevated',
+        reason: 'Attendance lag: 18/25 trainees recorded on Room A CCTV during morning shift',
+        status: 'Open',
+        createdAt: '2026-09-23 11:45:00',
+      ),
+
+      // PRJ-JAI-2025-01
+      AlertModel(
+        id: 'ALT-JAI01-01',
+        projectId: 'PRJ-JAI-2025-01',
+        projectName: 'Vision Restorative Eyecare Mission',
+        severity: 'Normal',
+        reason: 'Batch renewal for consumable intraocular lenses required before Q4 camp',
+        status: 'Open',
+        createdAt: '2026-09-17 13:10:00',
+      ),
     ]);
 
-    // Inspections
+    // Inspections for all projects
     final inspHash1 = computeSha256('INSP-MOSJE-2026-001:VERIFIED:AKSHAYA');
     final inspHash2 = computeSha256('INSP-MOSJE-2026-002:REQUIRES_ACTION:MUMBAI');
+    final inspHash3 = computeSha256('INSP-MOSJE-2026-003:ASSIGNED:BANGALORE');
+    final inspHash4 = computeSha256('INSP-MOSJE-2026-004:VERIFIED:LUCKNOW');
+    final inspHash5 = computeSha256('INSP-MOSJE-2026-005:VERIFIED:JAIPUR');
+    final inspHash6 = computeSha256('INSP-MOSJE-2026-006:VERIFIED:DELHI_SENIORS');
 
     _inspections.addAll([
       InspectionModel(
@@ -872,7 +1702,7 @@ class DrishtiService extends ChangeNotifier {
         capturedTimestamp: '2026-09-15 11:24:18',
         checklistResults: {
           'Infrastructure & Classrooms': 'Pass',
-          'Biometric & Headcount Validation': 'Fail',
+          'Biometric & Headcount Validation': 'Pass',
           'Sanitation & Barrier-Free Access': 'Pass',
           'Beneficiary Stipend Records': 'Pass',
           'Faculty Attendance & Credentials': 'Pass',
@@ -929,67 +1759,182 @@ class DrishtiService extends ChangeNotifier {
         projectId: 'PRJ-BLR-2024-01',
         projectName: 'Rural SC/ST Artisan Livelihood Program',
         assignedInspector: 'Inspector Rajesh V.',
-        status: 'Assigned',
-        overallResult: '—',
-        governmentReview: 'Pending',
-        assignedDate: '2026-09-22',
-        submittedDate: null,
+        status: 'Reviewed',
+        overallResult: 'Verified',
+        governmentReview: 'Verified',
+        assignedDate: '2026-08-20',
+        submittedDate: '2026-08-25',
         reason: 'Milestone Progress & Final Utilization Verification',
         latitude: 12.9784,
         longitude: 77.6408,
+        capturedTimestamp: '2026-08-25 15:40:00',
+        checklistResults: {
+          'Artisan Looms Operating': 'Pass',
+          'Yarn Inventory Reconciliation': 'Pass',
+          'Cooperative Bank Passbooks': 'Pass',
+          'Beneficiary Sign-off': 'Pass',
+        },
+        photoWatermarkData: {
+          'camera_model': 'GovAudit-Handheld-T4',
+          'latitude': 12.9784,
+          'longitude': 77.6408,
+          'timestamp': '2026-08-25T15:40:00Z',
+        },
+        observations: '120 rural artisan families actively weaving. High-quality silk fabrics displayed. All books reconciled.',
+        sha256Hash: inspHash3,
+      ),
+      InspectionModel(
+        inspectionId: 'INSP-MOSJE-2026-004',
+        orgId: 'NGO-LKO-04',
+        orgName: 'Chetna Mahila Kalyan Parishad',
+        projectId: 'PRJ-LKO-2025-01',
+        projectName: 'Destitute Women Micro-Enterprise Hub',
+        assignedInspector: 'Inspector Sunita Verma',
+        status: 'Reviewed',
+        overallResult: 'Verified',
+        governmentReview: 'Verified',
+        assignedDate: '2026-09-01',
+        submittedDate: '2026-09-06',
+        reason: 'Mid-term Scheme Verification Audit',
+        latitude: 26.8467,
+        longitude: 80.9462,
+        capturedTimestamp: '2026-09-06 12:15:30',
+        checklistResults: {
+          'Apparel Workshop Safety': 'Pass',
+          'Food Safety FSSAI Hygiene': 'Pass',
+          'Trainee Attendance': 'Pass',
+          'Raw Material Stock': 'Pass',
+        },
+        observations: 'All 20 sewing machines operational. Packaging facility complies with hygiene standards.',
+        sha256Hash: inspHash4,
+      ),
+      InspectionModel(
+        inspectionId: 'INSP-MOSJE-2026-005',
+        orgId: 'NGO-JAI-05',
+        orgName: 'Arogya Drishti Mission',
+        projectId: 'PRJ-JAI-2025-01',
+        projectName: 'Vision Restorative Eyecare Mission',
+        assignedInspector: 'Inspector Vikram Rathore',
+        status: 'Reviewed',
+        overallResult: 'Verified',
+        governmentReview: 'Verified',
+        assignedDate: '2026-09-08',
+        submittedDate: '2026-09-12',
+        reason: 'Surgical Camp Sterility & Beneficiary Audit',
+        latitude: 26.9124,
+        longitude: 75.7873,
+        capturedTimestamp: '2026-09-12 10:45:12',
+        checklistResults: {
+          'OT Sterilization Standards': 'Pass',
+          'IOL Batch Number Tracing': 'Pass',
+          'Post-op Followup Register': 'Pass',
+          'Zero-Cost Verification': 'Pass',
+        },
+        observations: 'Cataract surgeries verified without any patient charges. Followup visual acuity exceeds 6/12 in 94% cases.',
+        sha256Hash: inspHash5,
+      ),
+      InspectionModel(
+        inspectionId: 'INSP-MOSJE-2026-006',
+        orgId: 'NGO-DEL-01',
+        orgName: 'Akshaya Vidya Foundation',
+        projectId: 'PRJ-DEL-2025-02',
+        projectName: 'Senior Citizens Daycare & Medical Wing',
+        assignedInspector: 'Inspector Rajesh V.',
+        status: 'Reviewed',
+        overallResult: 'Verified',
+        governmentReview: 'Verified',
+        assignedDate: '2026-09-16',
+        submittedDate: '2026-09-20',
+        reason: 'Senior Welfare Compliance Audit',
+        latitude: 28.5921,
+        longitude: 77.0460,
+        capturedTimestamp: '2026-09-20 14:00:00',
+        checklistResults: {
+          'Barrier-Free Access & Ramps': 'Pass',
+          'Geriatric Medical Supervision': 'Pass',
+          'Nutritional Food Hygiene': 'Pass',
+          'Elderly Feedback Interviews': 'Pass',
+        },
+        observations: 'Daycare facility exemplary in barrier-free access. Senior citizens gave positive feedback regarding doctor visits.',
+        sha256Hash: inspHash6,
       ),
     ]);
 
-    // Audit Logs
-    _auditLogs.addAll([
-      AuditLogModel(
-        user: 'Admin Sharma',
-        role: 'Admin',
-        action: 'SANCTION_ISSUED',
-        entity: 'Project PRJ-DEL-2025-01 (₹45,00,000)',
-        timestamp: '2026-09-23 15:40:12',
+    // Progress Reports for all projects
+    _progressReports.addAll([
+      // PRJ-DEL-2025-01
+      ProgressReportModel(
+        id: 'REP-DEL01-01',
+        projectId: 'PRJ-DEL-2025-01',
+        projectName: 'PM-DAKSH Divyangjan Skill Center',
+        progressPct: 78.0,
+        beneficiariesServed: 142,
+        notes: 'All 5 assistive computer modules completed. 28 candidates already placed in banking back-office apprenticeships.',
+        submittedAt: '2026-09-14 18:22:00',
       ),
-      AuditLogModel(
-        user: 'System (AI Stream Processor)',
-        role: 'Admin',
-        action: 'CRITICAL_HEADCOUNT_ALERT',
-        entity: 'Akshaya Vidya Foundation (12/35 present)',
-        timestamp: '2026-09-22 10:14:00',
+      ProgressReportModel(
+        id: 'REP-DEL01-02',
+        projectId: 'PRJ-DEL-2025-01',
+        projectName: 'PM-DAKSH Divyangjan Skill Center',
+        progressPct: 50.0,
+        beneficiariesServed: 105,
+        notes: 'Mid-term assessment completed. Braille keyboards and optical scanners installed in Lab 2.',
+        submittedAt: '2025-07-28 14:10:00',
       ),
-      AuditLogModel(
-        user: 'Director MoSJE',
-        role: 'Admin',
-        action: 'INSPECTION_DISPATCHED',
-        entity: 'INSP-MOSJE-2026-003 to Inspector Rajesh V.',
-        timestamp: '2026-09-22 09:30:00',
+
+      // PRJ-DEL-2025-02
+      ProgressReportModel(
+        id: 'REP-DEL02-01',
+        projectId: 'PRJ-DEL-2025-02',
+        projectName: 'Senior Citizens Daycare & Medical Wing',
+        progressPct: 65.0,
+        beneficiariesServed: 84,
+        notes: 'Daily attendance regularized with 84 registered seniors. Physiotherapy ward operating at full capacity.',
+        submittedAt: '2026-09-10 16:30:00',
       ),
-      AuditLogModel(
-        user: 'Inspector Rajesh V.',
-        role: 'Inspector',
-        action: 'GEOLOCK_VERIFIED',
-        entity: 'GeoFence GPS match at 28.5921, 77.0460',
-        timestamp: '2026-09-15 11:20:00',
+
+      // PRJ-MUM-2025-01
+      ProgressReportModel(
+        id: 'REP-MUM01-01',
+        projectId: 'PRJ-MUM-2025-01',
+        projectName: 'De-addiction & Psychosocial Rehab Center',
+        progressPct: 88.0,
+        beneficiariesServed: 192,
+        notes: '192 patients treated under inpatient detox protocols. Community relapse prevention groups established across Bandra.',
+        submittedAt: '2026-09-12 11:45:00',
       ),
-      AuditLogModel(
-        user: 'Inspector Rajesh V.',
-        role: 'Inspector',
-        action: 'INSPECTION_SUBMITTED',
-        entity: 'INSP-MOSJE-2026-001 (SHA-256: ${inspHash1.substring(0, 16)}...)',
-        timestamp: '2026-09-15 11:45:00',
+
+      // PRJ-BLR-2024-01
+      ProgressReportModel(
+        id: 'REP-BLR01-01',
+        projectId: 'PRJ-BLR-2024-01',
+        projectName: 'Rural SC/ST Artisan Livelihood Program',
+        progressPct: 100.0,
+        beneficiariesServed: 120,
+        notes: 'Project successfully concluded. 100% target achieved with registered cooperative marketing directly to e-commerce stores.',
+        submittedAt: '2025-06-25 17:00:00',
       ),
-      AuditLogModel(
-        user: 'Admin Sharma',
-        role: 'Admin',
-        action: 'GOVERNMENT_REVIEW_VERIFIED',
-        entity: 'INSP-MOSJE-2026-001 marked Verified',
-        timestamp: '2026-09-16 14:10:00',
+
+      // PRJ-LKO-2025-01
+      ProgressReportModel(
+        id: 'REP-LKO01-01',
+        projectId: 'PRJ-LKO-2025-01',
+        projectName: 'Destitute Women Micro-Enterprise Hub',
+        progressPct: 60.0,
+        beneficiariesServed: 98,
+        notes: 'Apparel stitching division completed first wholesale uniform contract. Food processing unit cleared FSSAI inspections.',
+        submittedAt: '2026-09-08 15:10:00',
       ),
-      AuditLogModel(
-        user: 'Akshaya Vidya Foundation',
-        role: 'NGO Officer',
-        action: 'PROGRESS_REPORT_SUBMITTED',
-        entity: 'Q2 Progress 78% with trainee placement records',
-        timestamp: '2026-09-14 18:22:00',
+
+      // PRJ-JAI-2025-01
+      ProgressReportModel(
+        id: 'REP-JAI01-01',
+        projectId: 'PRJ-JAI-2025-01',
+        projectName: 'Vision Restorative Eyecare Mission',
+        progressPct: 74.0,
+        beneficiariesServed: 485,
+        notes: '485 elderly patients screened, 210 cataract surgeries performed with foldable IOLs, zero infection rate reported.',
+        submittedAt: '2026-09-15 12:20:00',
       ),
     ]);
 
@@ -1014,19 +1959,6 @@ class DrishtiService extends ChangeNotifier {
         priority: 'Medium',
         status: 'Resolved',
         createdAt: '2026-09-12 11:00:00',
-      ),
-    ]);
-
-    // Progress Reports
-    _progressReports.addAll([
-      ProgressReportModel(
-        id: 'REP-001',
-        projectId: 'PRJ-DEL-2025-01',
-        projectName: 'PM-DAKSH Divyangjan Skill Center',
-        progressPct: 78.0,
-        beneficiariesServed: 142,
-        notes: 'All 5 assistive computer modules completed. 28 candidates already placed in banking back-office apprenticeships.',
-        submittedAt: '2026-09-14 18:22:00',
       ),
     ]);
   }

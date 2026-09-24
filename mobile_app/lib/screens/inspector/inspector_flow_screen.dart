@@ -65,7 +65,7 @@ class _InspectorFlowScreenState extends State<InspectorFlowScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Inspection submitted successfully')),
     );
-    Navigator.popUntil(context, ModalRoute.withName('/inspector'));
+    Navigator.pop(context);
   }
 
   @override

@@ -36,6 +36,7 @@ class DrishtiApp extends StatelessWidget {
         switch (settings.name) {
           case '/':
             return MaterialPageRoute(
+              settings: settings,
               builder: (context) => LandingScreen(
                 onSelectNgoPortal: () =>
                     Navigator.pushNamed(context, '/ngo/dashboard'),
@@ -49,6 +50,7 @@ class DrishtiApp extends StatelessWidget {
             );
           case '/ngo/dashboard':
             return MaterialPageRoute(
+              settings: settings,
               builder: (context) => NgoDashboardScreen(
                 onSwitchPortal: () =>
                     Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false),
@@ -56,6 +58,7 @@ class DrishtiApp extends StatelessWidget {
             );
           case '/ngo/register':
             return MaterialPageRoute(
+              settings: settings,
               builder: (context) => NgoRegisterScreen(
                 onCancel: () => Navigator.pop(context),
                 onRegistered: () => Navigator.pushReplacementNamed(
@@ -64,18 +67,22 @@ class DrishtiApp extends StatelessWidget {
             );
           case '/admin/dashboard':
             return MaterialPageRoute(
+              settings: settings,
               builder: (context) => const AdminShell(),
             );
           case '/inspector':
             return MaterialPageRoute(
+              settings: settings,
               builder: (context) => const InspectorPortalScreen(),
             );
           case '/inspector/flow':
             return MaterialPageRoute(
+              settings: settings,
               builder: (context) => const InspectorFlowScreen(),
             );
           default:
             return MaterialPageRoute(
+              settings: settings,
               builder: (context) => const Scaffold(
                 body: Center(child: Text('Page not found')),
               ),

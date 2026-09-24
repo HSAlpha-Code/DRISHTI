@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/drishti_service.dart';
 import '../../widgets/common_ui.dart';
+import 'ngo_video_call_dialog.dart';
 
 class NgoProfileScreen extends StatelessWidget {
   final String orgId;
@@ -71,6 +72,24 @@ class NgoProfileScreen extends StatelessWidget {
                 ),
               ],
             );
+            final videoCallButton = ElevatedButton.icon(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) => NgoVideoCallDialog(organization: org),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: GovColors.green,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              icon: const Icon(Icons.video_call, size: 18),
+              label: const Text('Video Call Admin'),
+            );
+
             final backButton = OutlinedButton.icon(
               onPressed: onBack,
               style: OutlinedButton.styleFrom(
@@ -82,15 +101,34 @@ class NgoProfileScreen extends StatelessWidget {
               icon: const Icon(Icons.arrow_back, size: 16),
               label: const Text('Back to Registry'),
             );
+
             return isNarrow
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [header, const SizedBox(height: 12), backButton],
+                    children: [
+                      header,
+                      const SizedBox(height: 12),
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 8,
+                        children: [videoCallButton, backButton],
+                      ),
+                    ],
                   )
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Expanded(child: header), backButton],
+                    children: [
+                      Expanded(child: header),
+                      const SizedBox(width: 12),
+                      Row(
+                        children: [
+                          videoCallButton,
+                          const SizedBox(width: 10),
+                          backButton,
+                        ],
+                      ),
+                    ],
                   );
           }),
           const SizedBox(height: 24),

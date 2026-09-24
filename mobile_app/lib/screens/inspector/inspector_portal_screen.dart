@@ -8,8 +8,6 @@ class InspectorPortalScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final service = DrishtiService();
-    final currentTask = service.currentInspectionTask;
-    final pastInspections = service.pastInspections;
 
     return Scaffold(
       appBar: MoSJEAppBar(
@@ -17,11 +15,17 @@ class InspectorPortalScreen extends StatelessWidget {
         currentRole: 'Inspector',
         onSwitchPortal: () => Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false),
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1000),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      body: ListenableBuilder(
+        listenable: service,
+        builder: (context, _) {
+          final currentTask = service.currentInspectionTask;
+          final pastInspections = service.pastInspections;
+
+          return Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1000),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -142,7 +146,9 @@ class InspectorPortalScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
+    },
+  ),
+);
   }
 }
