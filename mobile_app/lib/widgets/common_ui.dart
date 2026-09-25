@@ -88,7 +88,6 @@ class CurvedStatCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
                   padding: const EdgeInsets.all(10),
@@ -98,22 +97,31 @@ class CurvedStatCard extends StatelessWidget {
                   ),
                   child: Icon(icon, color: iconColor, size: 22),
                 ),
-                if (badgeText != null)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: badgeBgColor ?? GovColors.greenBg,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Text(
-                      badgeText!,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: badgeColor ?? GovColors.green,
+                if (badgeText != null) ...[
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: badgeBgColor ?? GovColors.greenBg,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          badgeText!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: badgeColor ?? GovColors.green,
+                          ),
+                        ),
                       ),
                     ),
                   ),
+                ],
               ],
             ),
             const SizedBox(height: 16),
@@ -122,6 +130,8 @@ class CurvedStatCard extends StatelessWidget {
               children: [
                 Text(
                   value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
@@ -132,6 +142,8 @@ class CurvedStatCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -142,6 +154,8 @@ class CurvedStatCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     subtitle!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 11,
                       color: GovColors.textMuted,
@@ -222,6 +236,8 @@ class StatusBadge extends StatelessWidget {
       ),
       child: Text(
         status,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: textColor,
           fontSize: compact ? 11 : 12,
@@ -348,6 +364,30 @@ class RoundCheckboxTile extends StatelessWidget {
   }
 }
 
+class HorizontalScrollTable extends StatelessWidget {
+  final Widget child;
+
+  const HorizontalScrollTable({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final minWidth = constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : MediaQuery.sizeOf(context).width;
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minWidth: minWidth),
+            child: child,
+          ),
+        );
+      },
+    );
+  }
+}
+
 class MoSJEAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String portalTitle;
   final String currentRole;
@@ -360,50 +400,53 @@ class MoSJEAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onSwitchPortal,
   });
 
+  static const double _toolbarHeight = 64;
+
   @override
-  Size get preferredSize => const Size.fromHeight(68);
+  Size get preferredSize => const Size.fromHeight(_toolbarHeight);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: const BoxDecoration(
-        color: GovColors.navy,
-        border: Border(
-          bottom: BorderSide(color: Color(0xFF0A1C2E), width: 2),
-        ),
-      ),
-      child: SafeArea(
-        child: Row(
-          children: [
-            // Emblem / Insignia Mock
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(Icons.account_balance, color: Colors.white, size: 24),
+    final compact = MediaQuery.sizeOf(context).width < 720;
+
+    return AppBar(
+      toolbarHeight: _toolbarHeight,
+      backgroundColor: GovColors.navy,
+      foregroundColor: Colors.white,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      automaticallyImplyLeading: false,
+      titleSpacing: 12,
+      title: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
             ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Text(
-                        'DRISHTI',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 1.2,
-                        ),
+            child: const Icon(Icons.account_balance, color: Colors.white, size: 22),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Text(
+                      'DRISHTI',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.2,
                       ),
-                      const SizedBox(width: 8),
-                      Container(
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.15),
@@ -416,25 +459,34 @@ class MoSJEAppBar extends StatelessWidget implements PreferredSizeWidget {
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    ],
-                  ),
-                  const Text(
-                    'Ministry of Social Justice & Empowerment • Government of India',
-                    style: TextStyle(
-                      color: Color(0xFFCBD5E1),
-                      fontSize: 11,
-                      fontWeight: FontWeight.w400,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  ],
+                ),
+                const Text(
+                  'Ministry of Social Justice & Empowerment • Government of India',
+                  style: TextStyle(
+                    color: Color(0xFFCBD5E1),
+                    fontSize: 11,
+                    fontWeight: FontWeight.w400,
                   ),
-                ],
-              ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
-            // User Role Tag
-            Container(
+          ),
+        ],
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: compact ? 96 : 180),
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.1),
@@ -445,33 +497,47 @@ class MoSJEAppBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   const Icon(Icons.person, color: Color(0xFF93C5FD), size: 16),
                   const SizedBox(width: 6),
-                  Text(
-                    currentRole,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                  Flexible(
+                    child: Text(
+                      currentRole,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 12),
-            // Switch Portal button
-            OutlinedButton.icon(
+          ),
+        ),
+        if (compact)
+          IconButton(
+            tooltip: 'Switch Portal',
+            onPressed: onSwitchPortal,
+            icon: const Icon(Icons.sync_alt, size: 18),
+          )
+        else
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+            child: OutlinedButton.icon(
               onPressed: onSwitchPortal,
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.white,
                 side: const BorderSide(color: Color(0xFF475569)),
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                visualDensity: VisualDensity.compact,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
               icon: const Icon(Icons.sync_alt, size: 16),
               label: const Text('Switch Portal', style: TextStyle(fontSize: 12)),
             ),
-          ],
-        ),
-      ),
+          ),
+        const SizedBox(width: 8),
+      ],
     );
   }
 }

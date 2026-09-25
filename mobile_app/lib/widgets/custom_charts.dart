@@ -31,38 +31,46 @@ class FundingUtilizationChart extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Funding Utilization',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: GovColors.textDark,
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Funding Utilization',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: GovColors.textDark,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  const Text(
-                    'Sanctioned vs Released vs Spent Outlay',
-                    style: TextStyle(fontSize: 12, color: GovColors.textMuted),
-                  ),
-                ],
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: GovColors.blueBg,
-                  borderRadius: BorderRadius.circular(6),
+                    SizedBox(height: 2),
+                    Text(
+                      'Sanctioned vs Released vs Spent Outlay',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 12, color: GovColors.textMuted),
+                    ),
+                  ],
                 ),
-                child: Text(
-                  'Utilization: ${utilPct.toStringAsFixed(1)}%',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: GovColors.slateBlue,
+              ),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: GovColors.blueBg,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    'Utilization: ${utilPct.toStringAsFixed(1)}%',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: GovColors.slateBlue,
+                    ),
                   ),
                 ),
               ),
@@ -71,35 +79,38 @@ class FundingUtilizationChart extends StatelessWidget {
           const SizedBox(height: 24),
           LayoutBuilder(
             builder: (context, constraints) {
-              final double barWidth = (constraints.maxWidth * 0.16).clamp(38.0, 76.0);
-              return SizedBox(
-                height: 200,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildColumn(
-                      label: 'Sanctioned',
-                      amount: sanctioned,
-                      fraction: sanctioned / safeMax,
-                      color: const Color(0xFF0F2942),
-                      width: barWidth,
-                    ),
-                    _buildColumn(
-                      label: 'Released',
-                      amount: released,
-                      fraction: released / safeMax,
-                      color: const Color(0xFF2563EB),
-                      width: barWidth,
-                    ),
-                    _buildColumn(
-                      label: 'Spent',
-                      amount: spent,
-                      fraction: spent / safeMax,
-                      color: const Color(0xFF0D9488),
-                      width: barWidth,
-                    ),
-                  ],
+              return FittedBox(
+                fit: BoxFit.scaleDown,
+                child: SizedBox(
+                  width: constraints.maxWidth,
+                  height: 200,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildColumn(
+                        label: 'Sanctioned',
+                        amount: sanctioned,
+                        fraction: sanctioned / safeMax,
+                        color: const Color(0xFF0F2942),
+                        width: (constraints.maxWidth * 0.16).clamp(38.0, 76.0),
+                      ),
+                      _buildColumn(
+                        label: 'Released',
+                        amount: released,
+                        fraction: released / safeMax,
+                        color: const Color(0xFF2563EB),
+                        width: (constraints.maxWidth * 0.16).clamp(38.0, 76.0),
+                      ),
+                      _buildColumn(
+                        label: 'Spent',
+                        amount: spent,
+                        fraction: spent / safeMax,
+                        color: const Color(0xFF0D9488),
+                        width: (constraints.maxWidth * 0.16).clamp(38.0, 76.0),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -107,8 +118,10 @@ class FundingUtilizationChart extends StatelessWidget {
           const SizedBox(height: 12),
           const Divider(color: GovColors.border),
           const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          Wrap(
+            spacing: 16,
+            runSpacing: 8,
+            alignment: WrapAlignment.center,
             children: [
               _buildLegend('Sanctioned', const Color(0xFF0F2942)),
               _buildLegend('Released', const Color(0xFF2563EB)),
@@ -133,6 +146,8 @@ class FundingUtilizationChart extends StatelessWidget {
       children: [
         Text(
           FormatHelper.formatCurrency(amount),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w700,

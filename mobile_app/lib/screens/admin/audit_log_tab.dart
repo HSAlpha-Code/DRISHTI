@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../models/app_models.dart';
 import '../../services/drishti_service.dart';
 import '../../widgets/common_ui.dart';
 
@@ -9,8 +10,17 @@ class AuditLogTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final service = DrishtiService();
-    final logs = service.auditLogs;
 
+    return ListenableBuilder(
+      listenable: service,
+      builder: (context, _) {
+        final logs = service.auditLogs;
+        return _buildLogs(logs);
+      },
+    );
+  }
+
+  Widget _buildLogs(List<AuditLogModel> logs) {
     return SizedBox(
       width: double.infinity,
       child: SingleChildScrollView(
@@ -67,18 +77,38 @@ class AuditLogTab extends StatelessWidget {
                               DataColumn(label: Text('Entity / Particulars')),
                               DataColumn(label: Text('Timestamp')),
                             ],
-                            rows: logs.map((log) {
+                            rows: logs.isEmpty
+                                ? [
+                                    const DataRow(cells: [
+                                      DataCell(Text('No audit events recorded yet.')),
+                                      DataCell(Text('—')),
+                                      DataCell(Text('—')),
+                                      DataCell(Text('—')),
+                                      DataCell(Text('—')),
+                                    ]),
+                                  ]
+                                : logs.map((log) {
                               return DataRow(cells: [
-                                DataCell(Text(
-                                  log.user,
-                                  style: const TextStyle(fontWeight: FontWeight.w600),
+                                DataCell(ConstrainedBox(
+                                  constraints: const BoxConstraints(maxWidth: 180),
+                                  child: Text(
+                                    log.user,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontWeight: FontWeight.w600),
+                                  ),
                                 )),
                                 DataCell(_roleBadge(log.role)),
-                                DataCell(Text(
-                                  log.action,
-                                  style: const TextStyle(
-                                    fontFamily: 'monospace',
-                                    fontSize: 12,
+                                DataCell(ConstrainedBox(
+                                  constraints: const BoxConstraints(maxWidth: 220),
+                                  child: Text(
+                                    log.action,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontFamily: 'monospace',
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 )),
                                 DataCell(
@@ -93,11 +123,16 @@ class AuditLogTab extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                DataCell(Text(
-                                  log.timestamp,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: GovColors.textMuted,
+                                DataCell(ConstrainedBox(
+                                  constraints: const BoxConstraints(maxWidth: 160),
+                                  child: Text(
+                                    log.timestamp,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: GovColors.textMuted,
+                                    ),
                                   ),
                                 )),
                               ]);
@@ -127,6 +162,10 @@ class AuditLogTab extends StatelessWidget {
         bg = GovColors.amberBg;
         fg = GovColors.amber;
         break;
+      case 'System':
+        bg = const Color(0xFFF1F5F9);
+        fg = GovColors.textMuted;
+        break;
       default:
         bg = GovColors.greenBg;
         fg = GovColors.green;
@@ -139,6 +178,8 @@ class AuditLogTab extends StatelessWidget {
       ),
       child: Text(
         role,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: fg,
           fontWeight: FontWeight.w600,

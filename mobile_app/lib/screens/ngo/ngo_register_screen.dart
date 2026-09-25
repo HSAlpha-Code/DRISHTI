@@ -251,30 +251,34 @@ class _NgoRegisterScreenState extends State<NgoRegisterScreen> {
                 children: [
                   // Page Heading
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Organization Registration Questionnaire',
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800,
-                              color: GovColors.textDark,
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Organization Registration Questionnaire',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w800,
+                                color: GovColors.textDark,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          const Text(
-                            'Fill in institutional details to generate your official MoSJE activation registration ID',
-                            style: TextStyle(fontSize: 13, color: GovColors.textMuted),
-                          ),
-                        ],
+                            SizedBox(height: 4),
+                            Text(
+                              'Fill in institutional details to generate your official MoSJE activation registration ID',
+                              style: TextStyle(fontSize: 13, color: GovColors.textMuted),
+                            ),
+                          ],
+                        ),
                       ),
+                      const SizedBox(width: 8),
                       TextButton.icon(
                         onPressed: widget.onCancel,
                         icon: const Icon(Icons.arrow_back, size: 16),
-                        label: const Text('Return to Portal'),
+                        label: MediaQuery.sizeOf(context).width < 520
+                            ? const Text('Back')
+                            : const Text('Return to Portal'),
                         style: TextButton.styleFrom(foregroundColor: GovColors.slateBlue),
                       ),
                     ],

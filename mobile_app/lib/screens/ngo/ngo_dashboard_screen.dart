@@ -201,10 +201,10 @@ class _NgoDashboardScreenState extends State<NgoDashboardScreen> with SingleTick
                                     const SizedBox(height: 12),
                                     const Divider(color: GovColors.border),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         const Text('Switch Demo Profile:', style: TextStyle(fontSize: 12, color: GovColors.textMuted)),
-                                        switcherDropdown,
+                                        const SizedBox(width: 8),
+                                        Flexible(child: switcherDropdown),
                                       ],
                                     ),
                                   ],
@@ -291,6 +291,8 @@ class _NgoDashboardScreenState extends State<NgoDashboardScreen> with SingleTick
                       ),
                       child: TabBar(
                         controller: _tabController,
+                        isScrollable: true,
+                        tabAlignment: TabAlignment.start,
                         labelColor: GovColors.navy,
                         unselectedLabelColor: GovColors.textMuted,
                         indicatorColor: GovColors.navy,
@@ -384,14 +386,16 @@ class _NgoDashboardScreenState extends State<NgoDashboardScreen> with SingleTick
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 180,
+          Flexible(
+            flex: 2,
             child: Text(
               label,
               style: const TextStyle(fontSize: 13, color: GovColors.textMuted, fontWeight: FontWeight.w500),
             ),
           ),
+          const SizedBox(width: 12),
           Expanded(
+            flex: 3,
             child: Text(
               value,
               style: TextStyle(
@@ -428,12 +432,16 @@ class _NgoDashboardScreenState extends State<NgoDashboardScreen> with SingleTick
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    prj.name,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: GovColors.navy),
+                  Expanded(
+                    child: Text(
+                      prj.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: GovColors.navy),
+                    ),
                   ),
+                  const SizedBox(width: 8),
                   StatusBadge(status: prj.status),
                 ],
               ),
@@ -449,10 +457,18 @@ class _NgoDashboardScreenState extends State<NgoDashboardScreen> with SingleTick
               ),
               const SizedBox(height: 16),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Progress: ${prj.progressPct.toStringAsFixed(0)}%', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-                  Text('${prj.beneficiariesRegistered} / ${prj.beneficiariesTarget} Beneficiaries', style: const TextStyle(fontSize: 12, color: GovColors.textMuted)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      '${prj.beneficiariesRegistered} / ${prj.beneficiariesTarget} Beneficiaries',
+                      textAlign: TextAlign.end,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 12, color: GovColors.textMuted),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 6),
@@ -469,10 +485,10 @@ class _NgoDashboardScreenState extends State<NgoDashboardScreen> with SingleTick
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _statItem('Sanctioned', FormatHelper.formatCurrency(prj.sanctionedAmount)),
-                  _statItem('Released', FormatHelper.formatCurrency(prj.releasedAmount)),
-                  _statItem('Spent', FormatHelper.formatCurrency(prj.spentAmount)),
-                  _statItem('Utilization', '${prj.utilizationPct.toStringAsFixed(1)}%'),
+                  Expanded(child: _statItem('Sanctioned', FormatHelper.formatCurrency(prj.sanctionedAmount))),
+                  Expanded(child: _statItem('Released', FormatHelper.formatCurrency(prj.releasedAmount))),
+                  Expanded(child: _statItem('Spent', FormatHelper.formatCurrency(prj.spentAmount))),
+                  Expanded(child: _statItem('Utilization', '${prj.utilizationPct.toStringAsFixed(1)}%')),
                 ],
               ),
             ],
@@ -620,10 +636,15 @@ class _NgoDashboardScreenState extends State<NgoDashboardScreen> with SingleTick
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      issue.subject,
-                                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: GovColors.textDark),
+                                    Expanded(
+                                      child: Text(
+                                        issue.subject,
+                                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: GovColors.textDark),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
+                                    const SizedBox(width: 8),
                                     Text(
                                       issue.createdAt,
                                       style: const TextStyle(fontSize: 11, color: GovColors.textMuted),
@@ -823,19 +844,22 @@ class _NgoDashboardScreenState extends State<NgoDashboardScreen> with SingleTick
                               ],
                             ),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                '${r.beneficiariesServed} Beneficiaries',
-                                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: GovColors.slateBlue),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                r.submittedAt,
-                                style: const TextStyle(fontSize: 10, color: GovColors.textMuted),
-                              ),
-                            ],
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  '${r.beneficiariesServed} Beneficiaries',
+                                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: GovColors.slateBlue),
+                                  textAlign: TextAlign.right,
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  r.submittedAt,
+                                  style: const TextStyle(fontSize: 10, color: GovColors.textMuted),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

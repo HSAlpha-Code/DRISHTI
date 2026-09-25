@@ -62,6 +62,8 @@ class _IndiaMapWidgetState extends State<IndiaMapWidget> {
                   children: [
                     const Text(
                       'National NGO Geo-Distribution (OpenStreetMap)',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -71,6 +73,8 @@ class _IndiaMapWidgetState extends State<IndiaMapWidget> {
                     const SizedBox(height: 2),
                     const Text(
                       'Interactive OpenStreetMap centered on India • Click any center marker for details',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 12, color: GovColors.textMuted),
                     ),
                   ],

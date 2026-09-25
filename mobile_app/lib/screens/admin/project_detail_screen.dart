@@ -554,81 +554,110 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
           const SizedBox(height: 20),
 
           // Key metrics row
-          Row(
-            children: [
-              _metricChip('Beneficiaries Count', '${project.beneficiariesRegistered} / ${project.beneficiariesTarget}'),
-              const SizedBox(width: 16),
-              _metricChip('Funding Utilization', '${project.utilizationPct.toStringAsFixed(1)}%'),
-              const SizedBox(width: 16),
-              _metricChip('Open Alerts (AI Engine)', '$openAlertsCount Open', isAlert: openAlertsCount > 0),
-            ],
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final stacked = constraints.maxWidth < 640;
+              final chips = [
+                _metricChip('Beneficiaries Count', '${project.beneficiariesRegistered} / ${project.beneficiariesTarget}'),
+                _metricChip('Funding Utilization', '${project.utilizationPct.toStringAsFixed(1)}%'),
+                _metricChip('Open Alerts (AI Engine)', '$openAlertsCount Open', isAlert: openAlertsCount > 0),
+              ];
+              if (stacked) {
+                return Column(
+                  children: [
+                    for (int i = 0; i < chips.length; i++) ...[
+                      if (i > 0) const SizedBox(height: 10),
+                      chips[i],
+                    ],
+                  ],
+                );
+              }
+              return Row(
+                children: [
+                  Expanded(child: chips[0]),
+                  const SizedBox(width: 16),
+                  Expanded(child: chips[1]),
+                  const SizedBox(width: 16),
+                  Expanded(child: chips[2]),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 24),
 
           // 2 Nested Cards: Project Information & Financial Position
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Nested Card 1: Project Information
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: GovColors.background,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: GovColors.border),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Project Information',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: GovColors.navy),
-                      ),
-                      const SizedBox(height: 12),
-                      const Divider(color: GovColors.border),
-                      const SizedBox(height: 10),
-                      _nestedRow('Project ID', project.id),
-                      _nestedRow('Category', project.category),
-                      _nestedRow('Lifecycle Status', project.status),
-                      _nestedRow('Commencement Date', project.startDate),
-                      _nestedRow('Target Completion', project.endDate),
-                      _nestedRow('Beneficiaries Recorded', '${project.beneficiariesRegistered} individuals'),
-                    ],
-                  ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final isNarrow = constraints.maxWidth < 600;
+              final infoCard = Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: GovColors.background,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: GovColors.border),
                 ),
-              ),
-              const SizedBox(width: 20),
-
-              // Nested Card 2: Financial Position
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: GovColors.background,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: GovColors.border),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Financial Position',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: GovColors.navy),
-                      ),
-                      const SizedBox(height: 12),
-                      const Divider(color: GovColors.border),
-                      const SizedBox(height: 10),
-                      _nestedRow('Sanctioned Outlay', FormatHelper.formatCurrency(project.sanctionedAmount)),
-                      _nestedRow('Released via DBT', FormatHelper.formatCurrency(project.releasedAmount)),
-                      _nestedRow('Spent & Audited', FormatHelper.formatCurrency(project.spentAmount)),
-                      _nestedRow('Remaining Grant', FormatHelper.formatCurrency(project.remainingAmount)),
-                      _nestedRow('Utilization Ratio', '${project.utilizationPct.toStringAsFixed(1)}%'),
-                    ],
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Project Information',
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: GovColors.navy),
+                    ),
+                    const SizedBox(height: 12),
+                    const Divider(color: GovColors.border),
+                    const SizedBox(height: 10),
+                    _nestedRow('Project ID', project.id),
+                    _nestedRow('Category', project.category),
+                    _nestedRow('Lifecycle Status', project.status),
+                    _nestedRow('Commencement Date', project.startDate),
+                    _nestedRow('Target Completion', project.endDate),
+                    _nestedRow('Beneficiaries Recorded', '${project.beneficiariesRegistered} individuals'),
+                  ],
                 ),
-              ),
-            ],
+              );
+              final financialCard = Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: GovColors.background,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: GovColors.border),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Financial Position',
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: GovColors.navy),
+                    ),
+                    const SizedBox(height: 12),
+                    const Divider(color: GovColors.border),
+                    const SizedBox(height: 10),
+                    _nestedRow('Sanctioned Outlay', FormatHelper.formatCurrency(project.sanctionedAmount)),
+                    _nestedRow('Released via DBT', FormatHelper.formatCurrency(project.releasedAmount)),
+                    _nestedRow('Spent & Audited', FormatHelper.formatCurrency(project.spentAmount)),
+                    _nestedRow('Remaining Grant', FormatHelper.formatCurrency(project.remainingAmount)),
+                    _nestedRow('Utilization Ratio', '${project.utilizationPct.toStringAsFixed(1)}%'),
+                  ],
+                ),
+              );
+              if (isNarrow) {
+                return Column(
+                  children: [
+                    infoCard,
+                    const SizedBox(height: 16),
+                    financialCard,
+                  ],
+                );
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: infoCard),
+                  const SizedBox(width: 20),
+                  Expanded(child: financialCard),
+                ],
+              );
+            },
           ),
         ],
       ),
@@ -636,22 +665,31 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
   }
 
   Widget _metricChip(String label, String value, {bool isAlert = false}) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isAlert ? GovColors.redBg : GovColors.background,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: isAlert ? GovColors.red : GovColors.border),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: TextStyle(fontSize: 11, color: isAlert ? GovColors.red : GovColors.textMuted)),
-            const SizedBox(height: 4),
-            Text(value, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: isAlert ? GovColors.red : GovColors.textDark)),
-          ],
-        ),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: isAlert ? GovColors.redBg : GovColors.background,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: isAlert ? GovColors.red : GovColors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 11, color: isAlert ? GovColors.red : GovColors.textMuted),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: isAlert ? GovColors.red : GovColors.textDark),
+          ),
+        ],
       ),
     );
   }
@@ -660,12 +698,52 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: 12, color: GovColors.textMuted)),
-          Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: GovColors.textDark)),
+          Expanded(
+            child: Text(label, style: const TextStyle(fontSize: 12, color: GovColors.textMuted)),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: GovColors.textDark),
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _actionHeader(String title, Widget action) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 560) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: GovColors.textDark)),
+              const SizedBox(height: 10),
+              action,
+            ],
+          );
+        }
+        return Row(
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: GovColors.textDark),
+              ),
+            ),
+            const SizedBox(width: 12),
+            action,
+          ],
+        );
+      },
     );
   }
 
@@ -676,20 +754,18 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Grant Allocations & Tranche Disbursements', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: GovColors.textDark)),
-              ElevatedButton.icon(
-                onPressed: () => _showAddFundingDialog(service, project),
-                style: ElevatedButton.styleFrom(backgroundColor: GovColors.navy, foregroundColor: Colors.white),
-                icon: const Icon(Icons.add, size: 16),
-                label: const Text('Add Funding'),
-              ),
-            ],
+          _actionHeader(
+            'Grant Allocations & Tranche Disbursements',
+            ElevatedButton.icon(
+              onPressed: () => _showAddFundingDialog(service, project),
+              style: ElevatedButton.styleFrom(backgroundColor: GovColors.navy, foregroundColor: Colors.white),
+              icon: const Icon(Icons.add, size: 16),
+              label: const Text('Add Funding'),
+            ),
           ),
           const SizedBox(height: 16),
-          DataTable(
+          HorizontalScrollTable(
+            child: DataTable(
             columns: const [
               DataColumn(label: Text('Funding Source')),
               DataColumn(label: Text('Stage')),
@@ -707,6 +783,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
               DataCell(Text(f.reference, style: const TextStyle(fontFamily: 'monospace'))),
             ])).toList(),
           ),
+          ),
         ],
       ),
     );
@@ -719,20 +796,18 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Audited Expenditure Records', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: GovColors.textDark)),
-              ElevatedButton.icon(
-                onPressed: () => _showAddExpenseDialog(service, project),
-                style: ElevatedButton.styleFrom(backgroundColor: GovColors.navy, foregroundColor: Colors.white),
-                icon: const Icon(Icons.add, size: 16),
-                label: const Text('Add Expense'),
-              ),
-            ],
+          _actionHeader(
+            'Audited Expenditure Records',
+            ElevatedButton.icon(
+              onPressed: () => _showAddExpenseDialog(service, project),
+              style: ElevatedButton.styleFrom(backgroundColor: GovColors.navy, foregroundColor: Colors.white),
+              icon: const Icon(Icons.add, size: 16),
+              label: const Text('Add Expense'),
+            ),
           ),
           const SizedBox(height: 16),
-          DataTable(
+          HorizontalScrollTable(
+            child: DataTable(
             columns: const [
               DataColumn(label: Text('TXN ID')),
               DataColumn(label: Text('Purpose')),
@@ -749,6 +824,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
               DataCell(Text(e.date)),
               DataCell(StatusBadge(status: e.status, compact: true)),
             ])).toList(),
+          ),
           ),
         ],
       ),
@@ -778,15 +854,31 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(doc.title, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: GovColors.textDark)),
+                    Text(
+                      doc.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: GovColors.textDark),
+                    ),
                     const SizedBox(height: 2),
-                    Text('Type: ${doc.docType} • Size: ${doc.fileSize} • Uploaded: ${doc.uploadedAt}', style: const TextStyle(fontSize: 11, color: GovColors.textMuted)),
+                    Text(
+                      'Type: ${doc.docType} • Size: ${doc.fileSize} • Uploaded: ${doc.uploadedAt}',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 11, color: GovColors.textMuted),
+                    ),
                     const SizedBox(height: 2),
-                    Text('SHA-256: ${doc.sha256Hash.substring(0, 24)}...', style: const TextStyle(fontSize: 10, fontFamily: 'monospace', color: GovColors.navy)),
+                    Text(
+                      'SHA-256: ${doc.sha256Hash.substring(0, 24)}...',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 10, fontFamily: 'monospace', color: GovColors.navy),
+                    ),
                   ],
                 ),
               ),
-              StatusBadge(status: 'Verified', compact: true),
+              const SizedBox(width: 8),
+              const StatusBadge(status: 'Verified', compact: true),
             ],
           ),
         );
@@ -801,20 +893,18 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Enrolled Beneficiary Registry', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: GovColors.textDark)),
-              ElevatedButton.icon(
-                onPressed: () => _showAddBeneficiaryDialog(service, project),
-                style: ElevatedButton.styleFrom(backgroundColor: GovColors.navy, foregroundColor: Colors.white),
-                icon: const Icon(Icons.person_add, size: 16),
-                label: const Text('Add Beneficiary'),
-              ),
-            ],
+          _actionHeader(
+            'Enrolled Beneficiary Registry',
+            ElevatedButton.icon(
+              onPressed: () => _showAddBeneficiaryDialog(service, project),
+              style: ElevatedButton.styleFrom(backgroundColor: GovColors.navy, foregroundColor: Colors.white),
+              icon: const Icon(Icons.person_add, size: 16),
+              label: const Text('Add Beneficiary'),
+            ),
           ),
           const SizedBox(height: 16),
-          DataTable(
+          HorizontalScrollTable(
+            child: DataTable(
             columns: const [
               DataColumn(label: Text('Name')),
               DataColumn(label: Text('Age')),
@@ -829,6 +919,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
               DataCell(Text(b.serviceReceived)),
               DataCell(Text(b.date)),
             ])).toList(),
+          ),
           ),
         ],
       ),
@@ -964,9 +1055,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
                       ],
                     )
                   : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        headerInfo,
+                        Expanded(child: headerInfo),
+                        const SizedBox(width: 12),
                         actionButtons,
                       ],
                     );
@@ -976,100 +1068,100 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
 
           // Video Feed Simulation / YOLO Output Box
           Container(
-            height: 300,
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.black,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: GovColors.border),
             ),
-            child: Stack(
-              children: [
-                if (_yoloBase64Image != null && _yoloBase64Image!.isNotEmpty)
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(11),
-                    child: Image.memory(
-                      base64Decode(_yoloBase64Image!),
-                      width: double.infinity,
-                      height: 300,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Image.asset(
-                        'assets/cctv_yolo_annotated.jpg',
-                        width: double.infinity,
-                        height: 300,
-                        fit: BoxFit.cover,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(11),
+              child: Stack(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: _yoloBase64Image != null && _yoloBase64Image!.isNotEmpty
+                        ? Image.memory(
+                            base64Decode(_yoloBase64Image!),
+                            width: double.infinity,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => Image.asset(
+                              'assets/cctv_yolo_annotated.jpg',
+                              width: double.infinity,
+                              fit: BoxFit.contain,
+                            ),
+                          )
+                        : Image.asset(
+                            'assets/cctv_yolo_annotated.jpg',
+                            width: double.infinity,
+                            fit: BoxFit.contain,
+                          ),
+                  ),
+                  Positioned(
+                    left: 12,
+                    right: 12,
+                    top: 16,
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      alignment: WrapAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.85),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(color: Colors.green, width: 1.5),
+                          ),
+                          child: Text(
+                            'Classroom Count: $_simulatedHeadcount',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.greenAccent,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                              fontFamily: 'monospace',
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.75),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text(
+                            'YOLOv11 • conf=0.15 • imgsz=960 • classes=[0]',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(color: Colors.white70, fontSize: 11, fontFamily: 'monospace'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    left: 12,
+                    right: 12,
+                    bottom: 16,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.65),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        'Model: yolo11n.pt • Video: simulated_classroom_cctv.mp4 • ${_simulatedFrameSec}s • ${_yoloLastRunTime ?? "Live"}',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: Colors.white54, fontSize: 11, fontFamily: 'monospace'),
                       ),
                     ),
-                  )
-                else
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(11),
-                    child: Image.asset(
-                      'assets/cctv_yolo_annotated.jpg',
-                      width: double.infinity,
-                      height: 300,
-                      fit: BoxFit.cover,
-                    ),
                   ),
-
-                // Headcount badge (matching resources/test.py logic)
-                Positioned(
-                  left: 20,
-                  top: 20,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.85),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: Colors.green, width: 1.5),
-                    ),
-                    child: Text(
-                      'Classroom Count: $_simulatedHeadcount',
-                      style: const TextStyle(
-                        color: Colors.greenAccent,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        fontFamily: 'monospace',
-                      ),
-                    ),
-                  ),
-                ),
-
-                // YOLO model specs badge top right
-                Positioned(
-                  right: 20,
-                  top: 20,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.75),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: const Text(
-                      'YOLOv11 • conf=0.15 • imgsz=960 • classes=[0]',
-                      style: TextStyle(color: Colors.white70, fontSize: 11, fontFamily: 'monospace'),
-                    ),
-                  ),
-                ),
-
-                // Video info bottom left
-                Positioned(
-                  left: 20,
-                  bottom: 16,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.65),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      'Model: yolo11n.pt • Video: simulated_classroom_cctv.mp4 • ${_simulatedFrameSec}s • ${_yoloLastRunTime ?? "Live"}',
-                      style: const TextStyle(color: Colors.white54, fontSize: 11, fontFamily: 'monospace'),
-                    ),
-                  ),
-                ),
-              ],
+                ],
             ),
+          ),
           ),
           const SizedBox(height: 20),
 
@@ -1088,20 +1180,26 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Row(
-                      children: [
-                        Icon(Icons.terminal, color: Colors.greenAccent, size: 16),
-                        SizedBox(width: 8),
-                        Text(
-                          'YOLOv11 SCRIPT OUTPUT: resources/test.py',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'monospace',
+                    Expanded(
+                      child: Row(
+                        children: const [
+                          Icon(Icons.terminal, color: Colors.greenAccent, size: 16),
+                          SizedBox(width: 8),
+                          Flexible(
+                            child: Text(
+                              'YOLOv11 SCRIPT OUTPUT: resources/test.py',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'monospace',
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -1210,19 +1308,33 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(a.reason, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: GovColors.textDark)),
+                    Text(
+                      a.reason,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: GovColors.textDark),
+                    ),
                     const SizedBox(height: 2),
-                    Text('Triggered: ${a.createdAt} • Status: ${a.status}', style: const TextStyle(fontSize: 11, color: GovColors.textMuted)),
+                    Text(
+                      'Triggered: ${a.createdAt} • Status: ${a.status}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 11, color: GovColors.textMuted),
+                    ),
                   ],
                 ),
               ),
-              OutlinedButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Alert ticket ${a.id} dispatched to Inspection Queue.')),
-                  );
-                },
-                child: const Text('Manage ->', style: TextStyle(fontSize: 12)),
+              const SizedBox(width: 8),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: OutlinedButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Alert ticket ${a.id} dispatched to Inspection Queue.')),
+                    );
+                  },
+                  child: const Text('Manage ->', style: TextStyle(fontSize: 12)),
+                ),
               ),
             ],
           ),
@@ -1240,7 +1352,8 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
         children: [
           const Text('Field Audit & Inspection Records', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: GovColors.textDark)),
           const SizedBox(height: 16),
-          DataTable(
+          HorizontalScrollTable(
+            child: DataTable(
             columns: const [
               DataColumn(label: Text('Inspection ID')),
               DataColumn(label: Text('Status')),
@@ -1268,6 +1381,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
               ),
             ])).toList(),
           ),
+          ),
         ],
       ),
     );
@@ -1275,24 +1389,20 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
 
   // 10. Audit Trail Tab (SHA-256 Cryptographic Ledger)
   Widget _buildTabAuditTrail(DrishtiService service, ProjectModel project) {
-    final projectLogs = service.auditLogs.where((l) =>
-      l.entity.contains(project.id) ||
-      l.action.contains(project.id) ||
-      l.entity.contains('Project') ||
-      l.entity.contains('Inspection') ||
-      l.entity.contains('NGO')
-    ).toList();
-    final displayLogs = projectLogs.isNotEmpty ? projectLogs : service.auditLogs;
+    final projectLogs = service.auditLogs.where((l) {
+      final haystack = '${l.entity} ${l.action}'.toLowerCase();
+      return haystack.contains(project.id.toLowerCase()) ||
+          haystack.contains(project.name.toLowerCase());
+    }).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final title = Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
@@ -1302,11 +1412,13 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
                   const SizedBox(height: 2),
                   Text(
                     'Immutable chronological audit records for Project: ${project.id}',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 12, color: GovColors.textMuted),
                   ),
                 ],
-              ),
-              Container(
+              );
+              final seal = Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
                   color: GovColors.navy.withValues(alpha: 0.1),
@@ -1314,72 +1426,125 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
                   border: Border.all(color: GovColors.navy.withValues(alpha: 0.3)),
                 ),
                 child: const Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.verified_user, color: GovColors.navy, size: 14),
                     SizedBox(width: 6),
-                    Text(
-                      'TAMPER-EVIDENT SHA-256',
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: GovColors.navy),
+                    Flexible(
+                      child: Text(
+                        'TAMPER-EVIDENT SHA-256',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: GovColors.navy),
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              headingRowColor: WidgetStateProperty.all(GovColors.background),
-              columns: const [
-                DataColumn(label: Text('Timestamp', style: TextStyle(fontWeight: FontWeight.w700))),
-                DataColumn(label: Text('Actor', style: TextStyle(fontWeight: FontWeight.w700))),
-                DataColumn(label: Text('Role', style: TextStyle(fontWeight: FontWeight.w700))),
-                DataColumn(label: Text('Action', style: TextStyle(fontWeight: FontWeight.w700))),
-                DataColumn(label: Text('Entity / Event Details', style: TextStyle(fontWeight: FontWeight.w700))),
-                DataColumn(label: Text('Integrity Hash (SHA-256)', style: TextStyle(fontWeight: FontWeight.w700))),
-              ],
-              rows: displayLogs.map((log) {
-                final hash = DrishtiService.computeSha256('${log.timestamp}_${log.user}_${log.role}_${log.action}_${log.entity}');
-                final hashSnippet = hash.length > 16 ? '${hash.substring(0, 16)}...' : hash;
-                return DataRow(
-                  cells: [
-                    DataCell(Text(log.timestamp, style: const TextStyle(fontSize: 12))),
-                    DataCell(
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: GovColors.surface,
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(color: GovColors.border),
-                        ),
-                        child: Text(log.user, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
-                      ),
-                    ),
-                    DataCell(StatusBadge(status: log.role, compact: true)),
-                    DataCell(StatusBadge(status: log.action, compact: true)),
-                    DataCell(Text(log.entity, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500))),
-                    DataCell(
-                      Tooltip(
-                        message: hash,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.lock_outline, size: 12, color: GovColors.slateBlue),
-                            const SizedBox(width: 4),
-                            Text(
-                              hashSnippet,
-                              style: const TextStyle(fontFamily: 'monospace', fontSize: 11, color: GovColors.slateBlue),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+              );
+              if (constraints.maxWidth < 640) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    title,
+                    const SizedBox(height: 10),
+                    seal,
                   ],
                 );
-              }).toList(),
-            ),
+              }
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: title),
+                  const SizedBox(width: 12),
+                  seal,
+                ],
+              );
+            },
           ),
+          const SizedBox(height: 16),
+          if (projectLogs.isEmpty)
+            const Text(
+              'No project-specific ledger entries found.',
+              style: TextStyle(fontSize: 13, color: GovColors.textMuted),
+            )
+          else
+            HorizontalScrollTable(
+              child: DataTable(
+                headingRowColor: WidgetStateProperty.all(GovColors.background),
+                columns: const [
+                  DataColumn(label: Text('Timestamp', style: TextStyle(fontWeight: FontWeight.w700))),
+                  DataColumn(label: Text('Actor', style: TextStyle(fontWeight: FontWeight.w700))),
+                  DataColumn(label: Text('Role', style: TextStyle(fontWeight: FontWeight.w700))),
+                  DataColumn(label: Text('Action', style: TextStyle(fontWeight: FontWeight.w700))),
+                  DataColumn(label: Text('Entity / Event Details', style: TextStyle(fontWeight: FontWeight.w700))),
+                  DataColumn(label: Text('Integrity Hash (SHA-256)', style: TextStyle(fontWeight: FontWeight.w700))),
+                ],
+                rows: projectLogs.map((log) {
+                  final hash = DrishtiService.computeSha256('${log.timestamp}_${log.user}_${log.role}_${log.action}_${log.entity}');
+                  final hashSnippet = hash.length > 16 ? '${hash.substring(0, 16)}...' : hash;
+                  return DataRow(
+                    cells: [
+                      DataCell(Text(log.timestamp, style: const TextStyle(fontSize: 12))),
+                      DataCell(
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: GovColors.surface,
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: GovColors.border),
+                          ),
+                          child: Text(
+                            log.user,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ),
+                      DataCell(StatusBadge(status: log.role, compact: true)),
+                      DataCell(
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 220),
+                          child: Text(
+                            log.action,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, fontFamily: 'monospace'),
+                          ),
+                        ),
+                      ),
+                      DataCell(
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 360),
+                          child: Text(
+                            log.entity,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                      DataCell(
+                        Tooltip(
+                          message: hash,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.lock_outline, size: 12, color: GovColors.slateBlue),
+                              const SizedBox(width: 4),
+                              Text(
+                                hashSnippet,
+                                style: const TextStyle(fontFamily: 'monospace', fontSize: 11, color: GovColors.slateBlue),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }).toList(),
+              ),
+            ),
         ],
       ),
     );

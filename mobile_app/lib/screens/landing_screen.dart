@@ -27,17 +27,21 @@ class LandingScreen extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
               color: GovColors.deepNavy,
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.flag, color: Colors.orange, size: 14),
-                  SizedBox(width: 8),
-                  Text(
-                    'GOVERNMENT OF INDIA • MINISTRY OF SOCIAL JUSTICE & EMPOWERMENT',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.0,
+                  const Icon(Icons.flag, color: Colors.orange, size: 14),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'GOVERNMENT OF INDIA • MINISTRY OF SOCIAL JUSTICE & EMPOWERMENT',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 1.0,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
@@ -100,6 +104,9 @@ class LandingScreen extends StatelessWidget {
                         ),
                         child: const Text(
                           'Integrated Computer Vision • Geo-Fence Verified • Cryptographic SHA-256 Audit Trail',
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: Color(0xFFE2E8F0),
                             fontSize: 12,

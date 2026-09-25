@@ -145,16 +145,18 @@ class NgoProfileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Organization ID & Official Particulars',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: GovColors.navy,
+                    const Expanded(
+                      child: Text(
+                        'Organization ID & Official Particulars',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: GovColors.navy,
+                        ),
                       ),
                     ),
+                    const SizedBox(width: 8),
                     StatusBadge(status: org.sector),
                   ],
                 ),
