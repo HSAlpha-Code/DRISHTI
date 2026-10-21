@@ -92,11 +92,15 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final screen = MediaQuery.sizeOf(context);
+    final dialogWidth = (screen.width - 24).clamp(280.0, 900.0);
+    final dialogHeight = screen.height * 0.92;
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 900, maxHeight: 720),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      child: SizedBox(
+        width: dialogWidth,
+        height: dialogHeight,
         child: Container(
           decoration: BoxDecoration(
             color: const Color(0xFF0F172A),
@@ -145,40 +149,41 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
         ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: GovColors.slateBlue.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: GovColors.slateBlue.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: const Icon(Icons.video_call, color: Color(0xFF60A5FA), size: 20),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Direct Video Call: ${widget.organization.name}',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-                child: const Icon(Icons.video_call, color: Color(0xFF60A5FA), size: 20),
-              ),
-              const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Direct Video Call: ${widget.organization.name}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                    ),
+                Text(
+                  'Encrypted WebRTC session • Verified NGO Administrator',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.6),
+                    fontSize: 11,
                   ),
-                  Text(
-                    'MoSJE WebRTC Gateway • Verified NGO Administrator',
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.6),
-                      fontSize: 11,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
           IconButton(
             icon: const Icon(Icons.close, color: Colors.white70, size: 20),
@@ -219,6 +224,9 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
           const SizedBox(height: 24),
           Text(
             widget.organization.name,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -226,9 +234,13 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
             ),
           ),
           const SizedBox(height: 6),
-          Text(
-            'Connecting to NGO Administrator (${widget.organization.contactPhone})',
-            style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Connecting to NGO Administrator (${widget.organization.contactPhone})',
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
+            ),
           ),
           const SizedBox(height: 20),
           const SizedBox(
@@ -262,12 +274,10 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
   }
 
   Widget _buildConnectedView() {
-    return Row(
-      children: [
-        // Main Video Area
-        Expanded(
-          flex: 7,
-          child: Container(
+    final isNarrow = MediaQuery.sizeOf(context).width < 700;
+    final videoPane = Expanded(
+      flex: 7,
+      child: Container(
             margin: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.black,
@@ -300,14 +310,24 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
                             child: const Icon(Icons.account_box, color: Colors.white60, size: 72),
                           ),
                           const SizedBox(height: 14),
-                          Text(
-                            'NGO Executive Desk: ${widget.organization.name}',
-                            style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w600),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(
+                              'NGO Executive Desk: ${widget.organization.name}',
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w600),
+                            ),
                           ),
                           const SizedBox(height: 4),
-                          const Text(
-                            'Audio Waveform Active • Video Stream Synchronized (30 fps)',
-                            style: TextStyle(color: Color(0xFF10B981), fontSize: 12, fontWeight: FontWeight.w500),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(
+                              'Audio Waveform Active • Video Stream Synchronized (30 fps)',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Color(0xFF10B981), fontSize: 12, fontWeight: FontWeight.w500),
+                            ),
                           ),
                         ],
                       ),
@@ -381,6 +401,7 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
                   Positioned(
                     bottom: 14,
                     left: 14,
+                    right: 160,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
@@ -389,6 +410,8 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
                       ),
                       child: Text(
                         'Geo-Stamp: ${widget.organization.latitude.toStringAsFixed(4)}°N, ${widget.organization.longitude.toStringAsFixed(4)}°E • ${widget.organization.city}',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 11,
@@ -444,13 +467,14 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
               ),
             ),
           ),
-        ),
+    );
 
-        // Side Notes & Tele-Audit Dossier Panel
-        Expanded(
+    final notes = Expanded(
           flex: 4,
           child: Container(
-            margin: const EdgeInsets.only(top: 16, bottom: 16, right: 16),
+            margin: isNarrow
+                ? const EdgeInsets.fromLTRB(16, 0, 16, 16)
+                : const EdgeInsets.only(top: 16, bottom: 16, right: 16),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: const Color(0xFF1E293B),
@@ -545,8 +569,14 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
               ],
             ),
           ),
-        ),
-      ],
+    );
+
+    if (isNarrow) {
+      return Column(children: [videoPane, notes]);
+    }
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [videoPane, notes],
     );
   }
 
@@ -556,8 +586,19 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 11)),
-          Text(value, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600)),
+          Flexible(
+            child: Text(label, style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 11)),
+          ),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
+            ),
+          ),
         ],
       ),
     );
@@ -573,7 +614,9 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
           bottomRight: Radius.circular(16),
         ),
       ),
-      child: Row(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Mute Mic
@@ -629,6 +672,7 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
             label: const Text('End Teleconference', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
           ),
         ],
+        ),
       ),
     );
   }
@@ -679,12 +723,16 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
             child: const Icon(Icons.verified, color: Color(0xFF34D399), size: 54),
           ),
           const SizedBox(height: 20),
-          const Text(
-            'Teleconference Session Completed',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w800,
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Teleconference Session Completed',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -695,21 +743,16 @@ class _NgoVideoCallDialogState extends State<NgoVideoCallDialog> {
           const SizedBox(height: 16),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            margin: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               color: const Color(0xFF1E293B),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: const Color(0xFF334155)),
             ),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.lock, color: Color(0xFF60A5FA), size: 14),
-                SizedBox(width: 8),
-                Text(
-                  'Encrypted Call Audit Event Logged to National Integrity Ledger',
-                  style: TextStyle(color: Color(0xFFE2E8F0), fontSize: 11, fontFamily: 'monospace'),
-                ),
-              ],
+            child: const Text(
+              'Encrypted call event logged to the integrity ledger',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Color(0xFFE2E8F0), fontSize: 11, fontFamily: 'monospace'),
             ),
           ),
           const SizedBox(height: 28),

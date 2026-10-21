@@ -1,6 +1,6 @@
 {
-    "name": "sih_inspector_app",
-    "short_name": "sih_inspector_app",
+    "name": "Drishti",
+    "short_name": "Drishti",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

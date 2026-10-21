@@ -37,7 +37,7 @@ class _InspectionListTabState extends State<InspectionListTab> {
             ),
             const SizedBox(height: 4),
             const Text(
-              'All field inspections dispatched by Ministry of Social Justice & Empowerment',
+              'All field inspections dispatched across funded NGO centres',
               style: TextStyle(fontSize: 13, color: GovColors.textMuted),
             ),
             const SizedBox(height: 20),

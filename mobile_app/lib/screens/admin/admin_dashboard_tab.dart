@@ -34,7 +34,7 @@ class AdminDashboardTab extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           const Text(
-            'Ministry of Social Justice & Empowerment • National Scheme Audit Overview',
+            'National Scheme Audit Overview',
             style: TextStyle(fontSize: 13, color: GovColors.textMuted),
           ),
           const SizedBox(height: 24),

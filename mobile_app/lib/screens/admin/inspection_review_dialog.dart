@@ -31,12 +31,16 @@ class InspectionReviewDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    final dialogWidth = (size.width - 24).clamp(280.0, 850.0);
+    final dialogHeight = size.height * 0.92;
     return Dialog(
       backgroundColor: GovColors.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 850, maxHeight: 800),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      child: SizedBox(
+        width: dialogWidth,
+        height: dialogHeight,
         child: Column(
           children: [
             // Top Bar
@@ -50,21 +54,20 @@ class InspectionReviewDialog extends StatelessWidget {
                 ),
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      const Icon(Icons.fact_check, color: Colors.white, size: 20),
-                      const SizedBox(width: 10),
-                      Text(
-                        'Inspection Dossier: ${inspection.inspectionId}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                        ),
+                  const Icon(Icons.fact_check, color: Colors.white, size: 20),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'Inspection Dossier: ${inspection.inspectionId}',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
                       ),
-                    ],
+                    ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.close, color: Colors.white, size: 20),
@@ -118,28 +121,28 @@ class InspectionReviewDialog extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(
-                              width: 200,
+                            const Expanded(
+                              flex: 2,
                               child: Text(
                                 'Overall Field Result',
                                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: GovColors.textMuted),
                               ),
                             ),
-                            Expanded(child: StatusBadge(status: inspection.overallResult)),
+                            Expanded(flex: 3, child: StatusBadge(status: inspection.overallResult)),
                           ],
                         ),
                         const SizedBox(height: 10),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(
-                              width: 200,
+                            const Expanded(
+                              flex: 2,
                               child: Text(
                                 'Government Review Status',
                                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: GovColors.textMuted),
                               ),
                             ),
-                            Expanded(child: StatusBadge(status: inspection.governmentReview)),
+                            Expanded(flex: 3, child: StatusBadge(status: inspection.governmentReview)),
                           ],
                         ),
                         if (inspection.observations.isNotEmpty) ...[
@@ -163,12 +166,16 @@ class InspectionReviewDialog extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    entry.key,
-                                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: GovColors.textDark),
+                                  Expanded(
+                                    child: Text(
+                                      entry.key,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: GovColors.textDark),
+                                    ),
                                   ),
+                                  const SizedBox(width: 8),
                                   StatusBadge(status: entry.value, compact: true),
                                 ],
                               ),
@@ -332,9 +339,13 @@ class InspectionReviewDialog extends StatelessWidget {
             children: [
               Icon(icon, size: 18, color: GovColors.navy),
               const SizedBox(width: 8),
-              Text(
-                title,
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: GovColors.navy),
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: GovColors.navy),
+                ),
               ),
             ],
           ),
@@ -364,6 +375,7 @@ class InspectionReviewDialog extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   value,
+                  softWrap: true,
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: isKey ? FontWeight.w700 : FontWeight.w600,
@@ -388,6 +400,7 @@ class InspectionReviewDialog extends StatelessWidget {
               Expanded(
                 child: Text(
                   value,
+                  softWrap: true,
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: isKey ? FontWeight.w700 : FontWeight.w600,

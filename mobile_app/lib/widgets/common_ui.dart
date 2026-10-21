@@ -388,6 +388,25 @@ class HorizontalScrollTable extends StatelessWidget {
   }
 }
 
+/// Keeps dialog bodies inside the screen on phones (scroll + max height).
+class FittedDialogContent extends StatelessWidget {
+  final Widget child;
+
+  const FittedDialogContent({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: (size.width - 48).clamp(220.0, 520.0),
+        maxHeight: size.height * 0.58,
+      ),
+      child: SingleChildScrollView(child: child),
+    );
+  }
+}
+
 class MoSJEAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String portalTitle;
   final String currentRole;
@@ -400,7 +419,7 @@ class MoSJEAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.onSwitchPortal,
   });
 
-  static const double _toolbarHeight = 64;
+  static const double _toolbarHeight = 56;
 
   @override
   Size get preferredSize => const Size.fromHeight(_toolbarHeight);
@@ -429,52 +448,36 @@ class MoSJEAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    const Text(
-                      'DRISHTI',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          portalTitle.toUpperCase(),
-                          style: const TextStyle(
-                            color: Color(0xFF93C5FD),
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
                 const Text(
-                  'Ministry of Social Justice & Empowerment • Government of India',
+                  'DRISHTI',
                   style: TextStyle(
-                    color: Color(0xFFCBD5E1),
-                    fontSize: 11,
-                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.2,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      portalTitle.toUpperCase(),
+                      style: const TextStyle(
+                        color: Color(0xFF93C5FD),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
               ],
             ),

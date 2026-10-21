@@ -136,25 +136,26 @@ class _NgoRegisterScreenState extends State<NgoRegisterScreen> {
       builder: (ctx) {
         return AlertDialog(
           backgroundColor: GovColors.surface,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          scrollable: true,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-          title: Row(
+          title: const Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: const BoxDecoration(
-                  color: GovColors.greenBg,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.check, color: GovColors.green, size: 24),
+              CircleAvatar(
+                backgroundColor: GovColors.greenBg,
+                child: Icon(Icons.check, color: GovColors.green, size: 24),
               ),
-              const SizedBox(width: 12),
-              const Text(
-                'Registration Successful',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: GovColors.textDark),
+              SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Registration Successful',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: GovColors.textDark),
+                ),
               ),
             ],
           ),
-          content: Column(
+          content: FittedDialogContent(
+            child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -209,9 +210,12 @@ class _NgoRegisterScreenState extends State<NgoRegisterScreen> {
                 style: TextStyle(fontSize: 12, color: GovColors.textMuted),
               ),
             ],
+            ),
           ),
           actions: [
-            ElevatedButton(
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
               onPressed: () {
                 Navigator.of(ctx).pop();
                 widget.onRegistered();
@@ -223,6 +227,7 @@ class _NgoRegisterScreenState extends State<NgoRegisterScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
               child: const Text('Proceed to NGO Dashboard'),
+              ),
             ),
           ],
         );
@@ -296,27 +301,40 @@ class _NgoRegisterScreenState extends State<NgoRegisterScreen> {
                         validator: (v) => v == null || v.isEmpty ? 'Organization name is required' : null,
                       ),
                       const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: DropdownButtonFormField<String>(
-                              initialValue: _selectedSector,
-                              decoration: _inputDecoration('Sector Category', Icons.category),
-                              items: _sectors
-                                  .map((s) => DropdownMenuItem(value: s, child: Text(s)))
-                                  .toList(),
-                              onChanged: (v) => setState(() => _selectedSector = v!),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: TextFormField(
-                              controller: _emailController,
-                              decoration: _inputDecoration('Contact Email Address', Icons.email),
-                              validator: (v) => v == null || !v.contains('@') ? 'Valid email required' : null,
-                            ),
-                          ),
-                        ],
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final isNarrow = constraints.maxWidth < 500;
+                          final sectorField = DropdownButtonFormField<String>(
+                            initialValue: _selectedSector,
+                            decoration: _inputDecoration('Sector Category', Icons.category),
+                            items: _sectors
+                                .map((s) => DropdownMenuItem(value: s, child: Text(s)))
+                                .toList(),
+                            onChanged: (v) => setState(() => _selectedSector = v!),
+                          );
+                          final emailField = TextFormField(
+                            controller: _emailController,
+                            decoration: _inputDecoration('Contact Email Address', Icons.email),
+                            validator: (v) => v == null || !v.contains('@') ? 'Valid email required' : null,
+                          );
+
+                          if (isNarrow) {
+                            return Column(
+                              children: [
+                                sectorField,
+                                const SizedBox(height: 16),
+                                emailField,
+                              ],
+                            );
+                          }
+                          return Row(
+                            children: [
+                              Expanded(child: sectorField),
+                              const SizedBox(width: 16),
+                              Expanded(child: emailField),
+                            ],
+                          );
+                        },
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -334,27 +352,40 @@ class _NgoRegisterScreenState extends State<NgoRegisterScreen> {
                     title: '2. Physical Location & Postal Coordinates',
                     subtitle: 'Used for GPS geofencing and inspector-assignment logic',
                     children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: _cityController,
-                              decoration: _inputDecoration('City / District', Icons.location_city),
-                              validator: (v) => v == null || v.isEmpty ? 'City is required' : null,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: DropdownButtonFormField<String>(
-                              initialValue: _selectedState,
-                              decoration: _inputDecoration('State / UT', Icons.map),
-                              items: _states
-                                  .map((st) => DropdownMenuItem(value: st, child: Text(st)))
-                                  .toList(),
-                              onChanged: (v) => setState(() => _selectedState = v!),
-                            ),
-                          ),
-                        ],
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final isNarrow = constraints.maxWidth < 500;
+                          final cityField = TextFormField(
+                            controller: _cityController,
+                            decoration: _inputDecoration('City / District', Icons.location_city),
+                            validator: (v) => v == null || v.isEmpty ? 'City is required' : null,
+                          );
+                          final stateField = DropdownButtonFormField<String>(
+                            initialValue: _selectedState,
+                            decoration: _inputDecoration('State / UT', Icons.map),
+                            items: _states
+                                .map((st) => DropdownMenuItem(value: st, child: Text(st)))
+                                .toList(),
+                            onChanged: (v) => setState(() => _selectedState = v!),
+                          );
+
+                          if (isNarrow) {
+                            return Column(
+                              children: [
+                                cityField,
+                                const SizedBox(height: 16),
+                                stateField,
+                              ],
+                            );
+                          }
+                          return Row(
+                            children: [
+                              Expanded(child: cityField),
+                              const SizedBox(width: 16),
+                              Expanded(child: stateField),
+                            ],
+                          );
+                        },
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -405,10 +436,10 @@ class _NgoRegisterScreenState extends State<NgoRegisterScreen> {
                   const SizedBox(height: 28),
 
                   // Submit Actions
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      OutlinedButton(
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      final isNarrow = constraints.maxWidth < 450;
+                      final cancelBtn = OutlinedButton(
                         onPressed: widget.onCancel,
                         style: OutlinedButton.styleFrom(
                           foregroundColor: GovColors.textDark,
@@ -417,14 +448,13 @@ class _NgoRegisterScreenState extends State<NgoRegisterScreen> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
                         child: const Text('Cancel'),
-                      ),
-                      const SizedBox(width: 16),
-                      ElevatedButton.icon(
+                      );
+                      final submitBtn = ElevatedButton.icon(
                         onPressed: _isSubmitting ? null : _handleSubmit,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: GovColors.navy,
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
                         icon: _isSubmitting
@@ -438,8 +468,27 @@ class _NgoRegisterScreenState extends State<NgoRegisterScreen> {
                           _isSubmitting ? 'Generating Key...' : 'Submit & Generate Activation Key',
                           style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                         ),
-                      ),
-                    ],
+                      );
+
+                      if (isNarrow) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            submitBtn,
+                            const SizedBox(height: 12),
+                            cancelBtn,
+                          ],
+                        );
+                      }
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          cancelBtn,
+                          const SizedBox(width: 16),
+                          submitBtn,
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),

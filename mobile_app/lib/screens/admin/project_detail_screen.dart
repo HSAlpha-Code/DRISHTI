@@ -153,8 +153,11 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: GovColors.surface,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        scrollable: true,
         title: const Text('Add Project Funding Tranche', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-        content: Column(
+        content: FittedDialogContent(
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(controller: sourceCtrl, decoration: const InputDecoration(labelText: 'Funding Source')),
@@ -172,6 +175,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
             const SizedBox(height: 10),
             TextField(controller: refCtrl, decoration: const InputDecoration(labelText: 'Sanction / Reference Number')),
           ],
+          ),
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
@@ -206,8 +210,11 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: GovColors.surface,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        scrollable: true,
         title: const Text('Add Expenditure Record', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-        content: Column(
+        content: FittedDialogContent(
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(controller: purposeCtrl, decoration: const InputDecoration(labelText: 'Expense Purpose')),
@@ -216,6 +223,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
             const SizedBox(height: 10),
             TextField(controller: vendorCtrl, decoration: const InputDecoration(labelText: 'Vendor Name')),
           ],
+          ),
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
@@ -249,8 +257,11 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: GovColors.surface,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        scrollable: true,
         title: const Text('Add Beneficiary Enrollment', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-        content: Column(
+        content: FittedDialogContent(
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Beneficiary Name')),
@@ -272,6 +283,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> with SingleTi
             const SizedBox(height: 10),
             TextField(controller: serviceCtrl, decoration: const InputDecoration(labelText: 'Service Received')),
           ],
+          ),
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),

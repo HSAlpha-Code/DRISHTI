@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'map_http_overrides_stub.dart'
+    if (dart.library.io) 'map_http_overrides_io.dart';
 import 'screens/landing_screen.dart';
 import 'screens/ngo/ngo_dashboard_screen.dart';
 import 'screens/ngo/ngo_register_screen.dart';
@@ -7,6 +9,7 @@ import 'screens/inspector/inspector_flow_screen.dart';
 import 'screens/inspector/inspector_portal_screen.dart';
 
 void main() {
+  installMapHttpOverrides();
   runApp(const DrishtiApp());
 }
 
@@ -16,7 +19,7 @@ class DrishtiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Drishti Platform',
+      title: 'Drishti',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,

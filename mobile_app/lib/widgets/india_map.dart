@@ -147,8 +147,22 @@ class _IndiaMapWidgetState extends State<IndiaMapWidget> {
                         ),
                         children: [
                           TileLayer(
-                            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            userAgentPackageName: 'in.gov.mosje.drishti',
+                            // OSM-based raster tiles. Primary host is OSM France (reliable
+                            // on Indian mobile networks); OSM.org is often 403 without UA.
+                            urlTemplate:
+                                'https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+                            fallbackUrl:
+                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            userAgentPackageName: 'com.sih.audit.sih_inspector_app',
+                            // Must be a mutable map. TileLayer calls headers.putIfAbsent
+                            // for User-Agent, which throws on a const map.
+                            tileProvider: NetworkTileProvider(
+                              headers: {
+                                'User-Agent':
+                                    'Drishti/1.0 (com.sih.audit.sih_inspector_app; SIH prototype; contact=sih@local)',
+                                'Referer': 'https://www.openstreetmap.org/',
+                              },
+                            ),
                             maxZoom: 19,
                           ),
                           MarkerLayer(
@@ -282,13 +296,26 @@ class _IndiaMapWidgetState extends State<IndiaMapWidget> {
     final totalFunding = orgProjects.fold(0.0, (sum, p) => sum + p.sanctionedAmount);
     final totalBeneficiaries = orgProjects.fold(0, (sum, p) => sum + p.beneficiariesRegistered);
 
-    final double popupWidth = (constraints.maxWidth * 0.42).clamp(260.0, 360.0);
+    final double available = constraints.maxWidth.isFinite
+        ? constraints.maxWidth
+        : MediaQuery.sizeOf(context).width;
+    final double popupWidth = (available - 28).clamp(200.0, 360.0);
+    final double popupMaxHeight = constraints.maxHeight.isFinite
+        ? (constraints.maxHeight - 28).clamp(160.0, constraints.maxHeight)
+        : 320.0;
 
     return Positioned(
+      left: 14,
       right: 14,
       top: 14,
-      width: popupWidth,
-      child: Container(
+      child: Align(
+        alignment: Alignment.topRight,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: popupWidth,
+            maxHeight: popupMaxHeight,
+          ),
+          child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -302,7 +329,8 @@ class _IndiaMapWidgetState extends State<IndiaMapWidget> {
             ),
           ],
         ),
-        child: Column(
+        child: SingleChildScrollView(
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -317,7 +345,7 @@ class _IndiaMapWidgetState extends State<IndiaMapWidget> {
                       fontWeight: FontWeight.w700,
                       color: GovColors.navy,
                     ),
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -344,17 +372,19 @@ class _IndiaMapWidgetState extends State<IndiaMapWidget> {
             ),
             const SizedBox(height: 12),
             Container(
+              width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
               decoration: BoxDecoration(
                 color: GovColors.background,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              child: Wrap(
+                alignment: WrapAlignment.spaceAround,
+                runSpacing: 8,
                 children: [
                   _popupStat('Projects', '${orgProjects.length}'),
                   _popupStat('Funding', FormatHelper.formatCurrency(totalFunding)),
-                  _popupStat('Beneficiaries', '$totalBeneficiaries'),
+                  _popupStat('Beneficiaries', FormatHelper.formatNumber(totalBeneficiaries)),
                 ],
               ),
             ),
@@ -378,23 +408,35 @@ class _IndiaMapWidgetState extends State<IndiaMapWidget> {
             ),
           ],
         ),
+        ),
+          ),
+        ),
       ),
     );
   }
 
   Widget _popupStat(String label, String value) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: GovColors.navy),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          label,
-          style: const TextStyle(fontSize: 10, color: GovColors.textMuted),
-        ),
-      ],
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minWidth: 72, maxWidth: 110),
+      child: Column(
+        children: [
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: GovColors.navy),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 10, color: GovColors.textMuted),
+          ),
+        ],
+      ),
     );
   }
 }

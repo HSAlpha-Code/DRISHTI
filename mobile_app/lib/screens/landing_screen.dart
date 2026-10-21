@@ -22,32 +22,6 @@ class LandingScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Top Government Ribbon
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-              color: GovColors.deepNavy,
-              child: Row(
-                children: [
-                  const Icon(Icons.flag, color: Colors.orange, size: 14),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'GOVERNMENT OF INDIA • MINISTRY OF SOCIAL JUSTICE & EMPOWERMENT',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 1.0,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
             // Hero Header
             Container(
               width: double.infinity,

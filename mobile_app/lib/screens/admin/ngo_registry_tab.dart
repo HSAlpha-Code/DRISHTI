@@ -45,8 +45,37 @@ class _NgoRegistryTabState extends State<NgoRegistryTab> {
       return matchesSearch && matchesSector && matchesState;
     }).toList();
 
-    final sectors = ['All', 'Education', 'Healthcare', 'Women Welfare', 'Skill Development', 'Social Defense'];
-    final states = ['All', 'Delhi', 'Maharashtra', 'Karnataka', 'Telangana', 'West Bengal', 'Tamil Nadu'];
+    final sectors = [
+      'All',
+      'Education',
+      'Healthcare',
+      'Women Welfare',
+      'Rural Development',
+      'Disability Support',
+      'Skill Development',
+      'Social Defense',
+      'Elderly Care',
+    ];
+    final states = [
+      'All',
+      'Delhi',
+      'Maharashtra',
+      'Karnataka',
+      'Uttar Pradesh',
+      'Rajasthan',
+      'Telangana',
+      'Tamil Nadu',
+      'West Bengal',
+      'Gujarat',
+      'Madhya Pradesh',
+      'Bihar',
+      'Punjab',
+      'Odisha',
+      'Kerala',
+      'Assam',
+      'Jharkhand',
+      'Jammu and Kashmir',
+    ];
 
     return SizedBox(
       width: double.infinity,

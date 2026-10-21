@@ -74,6 +74,8 @@ class _InspectionDetailPageState extends State<InspectionDetailPage> {
       builder: (ctx) => AlertDialog(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        scrollable: true,
         title: const Row(
           children: [
             Icon(Icons.check_circle, color: Color(0xFF16A34A), size: 32),
